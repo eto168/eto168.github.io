@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Personal Website"
+title                    : "Ethan's Personal Website"
 title_separator          : "-"
 name                     : &name "Ethan Tse"
 description              : &description "My personal website"
