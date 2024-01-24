@@ -2,6 +2,10 @@
 
 # Modify these to choose what tabs to show - et 2024 jan
 main:
+    # Add about page - et
+    - title: "About Me"
+      url: /about_me/
+
   # - title: "Publications"
   #   url: /publications/
 

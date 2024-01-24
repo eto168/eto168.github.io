@@ -12,35 +12,13 @@ I am a first-year PhD Student at Weill Cornell Medicine in the [Physiology, Biop
 
 Previously, I completed my undergraduate degree in Microbiology and Immunology at [UBC](https://you.ubc.ca/ubc_programs/microbiology-immunology/) and worked as a research assistant in [Dr. Christian Steidl's](https://www.bccrc.ca/dept/lcr/people/christian-steidl) lab at the [British Columbia Cancer Research Centre](https://www.bccrc.ca/) working on developing prognostic models and studying Follicular Lymphoma cancer evolution.
 
-Research Interests
-======
 
-### Brief Background:
-
-Cancer cells undergo Darwinian evolution, whereby cell-intrinsic and extrinsic factors modify a cell's fitness that in turn propogates continual selection. Intrinsically, genetic and epigenetic factors modify cellular phenotypes. Extrinsically the tumour microenvironment composed of many "normal" human cells ranging from fibroblasts to immune cells impose conditions that select for the fittest cancer cell (with varying definitions). Together, these factors lead to highly heterogeneous populations within the same patient, and within the same tumour. This diversity contributes to metastasis and drug-resistance and is
-consequently an important area of research. Improved understanding of tumour evolution can lead to the development of target therapies and hopefully improve patient outcomes.
-
-### Research Interests:
-
-Broadly, my research interests intersect to solve biological problems. Naturally, therefore, I am interested in topics from both **biology** and **computer science/statistics**.
-  + On the **biology** side, I am interested in topics related to immunology, selection, the tumour microenvironment, and cancer evolution.
-    + They can be investigated distinctly or unified and implemented into specific mathematical models, driven by my quantitative interests.
-  + On the **quantitative** side, I am interested in statistical machine learning, bayesian modelling, and statistical inference.
-    + I am interested in uncovering interpretable and experimentally-verifiable latent variables.
-    + I am interested in studying software principles to write well-designed and extendable software.
-    + I am interested in developing a greater understanding of fundamental statistical and mathematical principles. This is an area of further self-study.
-
-
-<!-- ### Others: -->
-<!-- I am currently writing a price-tracking application as a personal project. -->
-
-<!-- Acknowledgements
-======
-
-I have been blessed to have had so many mentors through my careeer. In academic circles, I would like to thank Drs. Christian Steidl, Ryan Morin, Ben Greenbaum, Ed Reznik, Laura Hilton, Katsuyoshi Takata, and Aixiang Jiang. I have missed many. -->
+<!-- skip lines -->
+<br />
+<br />
 
 About this website
-======
+=
 This is the start of my personal webpage. It's built on top of [academicpages template](https://github.com/academicpages/academicpages.github.io), which is built on top of [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/) created by Michael Rose.
 
 
