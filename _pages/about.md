@@ -10,7 +10,7 @@ redirect_from:
 
 I am a first-year PhD Student at Weill Cornell Medicine in the [Physiology, Biophysics, and Systems Biology](https://gradschool.weill.cornell.edu/programs/physiology-biophysics-systems-biology-1) program. I am currently in my rotation year and as of January 2024, I have rotated in [Dr. Benjamin Greenbaum's](https://www.mskcc.org/research-areas/labs/benjamin-greenbaum) lab where I wrote a tool to assess tumour-specific structural variants (in lab's private github repository) and am currently in [Dr. Ed Reznik's](https://www.mskcc.org/research-areas/labs/ed-reznik) lab.
 
-Previously, I completed my undergraduate degree in Microbiology and Immunology at [UBC](https://you.ubc.ca/ubc_programs/microbiology-immunology/) and worked as a research assistant in [Dr. Christian Steidl's](https://www.bccrc.ca/dept/lcr/people/christian-steidl) lab at the [British Columbia Cancer Research Centre](https://www.bccrc.ca/) working on developing prognostic models and studying Follicular Lymphoma cancer evolution.
+Previously, I completed my undergraduate degree in Microbiology and Immunology at [UBC](https://you.ubc.ca/ubc_programs/microbiology-immunology/) and worked as a research assistant in [Dr. Christian Steidl's](https://www.bccrc.ca/dept/lcr/people/christian-steidl) lab at the [British Columbia Cancer Research Centre](https://www.bccrc.ca/) developing prognostic models and studying Follicular Lymphoma cancer evolution.
 
 
 <!-- skip lines -->
