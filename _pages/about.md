@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Welcome to my homepage!"
+title: "About Me!"
 excerpt: "About me"
 author_profile: true
 redirect_from:
@@ -8,19 +8,19 @@ redirect_from:
   - /about.html
 ---
 
-I am a first-year PhD Student at Weill Cornell Medicine in the [Physiology, Biophysics, and Systems Biology](https://gradschool.weill.cornell.edu/programs/physiology-biophysics-systems-biology-1) program. I am currently in my rotation year and as of January 2024, I have rotated in [Dr. Benjamin Greenbaum's](https://www.mskcc.org/research-areas/labs/benjamin-greenbaum) lab where I wrote a tool to assess tumour-specific structural variants (in lab's private github repository) and am currently in [Dr. Ed Reznik's](https://www.mskcc.org/research-areas/labs/ed-reznik) lab.
+I am a second-year PhD Student at Weill Cornell Medicine in the [Physiology, Biophysics, and Systems Biology](https://gradschool.weill.cornell.edu/programs/physiology-biophysics-systems-biology-1) program. As of August 2024, I am completing my PhD in [Dr. Ed Reznik's](https://www.mskcc.org/research-areas/labs/ed-reznik) lab.
+
+My research focuses on the relationship between obesity and cancer. More specifically, I am working on understanding how obesity influences the molecular biology of tumours and determining the likelihood that these differences may be related to how obesity is a major cancer risk factor.
+
+In my first year, I completed rotations in [Dr. Benjamin Greenbaum's](https://www.mskcc.org/research-areas/labs/benjamin-greenbaum) lab, where I wrote a tool to assess tumour-specific structural variants, [Dr. Ed Reznik's](https://www.mskcc.org/research-areas/labs/ed-reznik) lab, and jointly in Drs. [Jaehee Kim](https://jaeheekimlab.github.io/) and [Bishoy Faltas'](https://faltaslab.weill.cornell.edu/) labs.
 
 Previously, I completed my undergraduate degree in Microbiology and Immunology at [UBC](https://you.ubc.ca/ubc_programs/microbiology-immunology/) and worked as a research assistant in [Dr. Christian Steidl's](https://www.bccrc.ca/dept/lcr/people/christian-steidl) lab at the [British Columbia Cancer Research Centre](https://www.bccrc.ca/) developing prognostic models and studying Follicular Lymphoma cancer evolution.
 
+<!-- About this website
 
-<!-- skip lines -->
-<br />
-<br />
+This is the start of my personal webpage. It's built on top of [academicpages template](https://github.com/academicpages/academicpages.github.io), which is built on top of [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/) created by Michael Rose. -->
 
-About this website
-=
-This is the start of my personal webpage. It's built on top of [academicpages template](https://github.com/academicpages/academicpages.github.io), which is built on top of [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/) created by Michael Rose.
-
+Last updated: {{ site.time | date: "%B %d, %Y" }}
 
 <!-- This is the front page of a website that is powered by the [academicpages template](https://github.com/academicpages/academicpages.github.io) and hosted on GitHub pages. [GitHub pages](https://pages.github.com) is a free service in which websites are built and hosted from code and data stored in a GitHub repository, automatically updating when a new commit is made to the respository. This template was forked from the [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/) created by Michael Rose, and then extended to support the kinds of content that academics have: publications, talks, teaching, a portfolio, blog posts, and a dynamically-generated CV. You can fork [this repository](https://github.com/academicpages/academicpages.github.io) right now, modify the configuration and markdown files, add your own PDFs and other content, and have your own site for free, with no ads! An older version of this template powers my own personal website at [stuartgeiger.com](http://stuartgeiger.com), which uses [this Github repository](https://github.com/staeiou/staeiou.github.io).
 
