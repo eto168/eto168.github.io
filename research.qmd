@@ -1,0 +1,19 @@
+---
+title: "About my Research"
+description-meta: "Ethan Tse's Personal Website"
+page-navigation: false
+toc: false
+#sidebar: false
+page-layout: full
+---
+
+## Lay summary
+
+Obesity is a major risk factor for at least 13 types of cancer, but *how* it
+acts as one remains unknown. Other well-known risk factors such
+as smoking, alcohol, and ultraviolet radiation are generally thought to lead
+to damages in your DNA, termed *mutations*. These are then thought to lead to
+abnormal cells that eventually, given the right conditions, become cancerous.
+However, obesity is unique from this perspective; no evidence has suggested
+that it is associated with mutations, and so how it contributes to the risk
+of developing so many cancers remains a mystery.

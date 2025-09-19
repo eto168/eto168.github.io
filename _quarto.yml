@@ -1,0 +1,29 @@
+project:
+  type: website
+  output-dir: _docs
+
+website:
+  title: "Ethan Tse"
+  image: "assets/images/profile_pictures/Tse,-Ethan-250401-08_RTC_1200x1200.jpg"
+  description: "Ethan Tse's Personal Website"
+  navbar:
+    left:
+      # - href: index.qmd
+      #   text: Home
+      # - href: about.qmd
+      #   text: About
+      - href: research.qmd
+        text: Research
+      - href: blog.qmd
+        text: Blog
+  page-footer:
+    left: "[Ethan Tse](https://github.com/eto168) &copy; <script>document.write(new Date().getFullYear())</script>"
+
+
+format:
+  html:
+    theme:
+      - minty
+      - brand
+    css: styles.css
+    toc: true

@@ -1,0 +1,33 @@
+---
+title: "Ethan Tse"
+description-meta: "Ethan Tse's Personal Website"
+image: "assets/images/profile_pictures/Tse,-Ethan-250401-08_RTC_1200x1200.jpg"
+page-navigation: false
+toc: false
+#sidebar: false
+page-layout: full
+
+about:
+  image-shape: round
+  id: hero-heading
+  image-width: 17em
+  template: trestles
+  links:
+    - icon: envelope
+      href: ett4003@med.cornell.edu
+    - icon: github
+      href: https://github.com/eto168
+    - icon: linkedin
+      href: https://www.linkedin.com/in/ethan-tse-4ba80114a/
+      target: _blank
+---
+
+:::{#hero-heading}
+
+I am a 3rd year PhD Candidate at [Weill Cornell Medicine](https://www.weill.cornell.edu/) in the [Physiology, Biophysics, and Systems Biology program](https://gradschool.weill.cornell.edu/programs/pbsb), working with [Dr. Ed Reznik](https://www.mskcc.org/research-areas/labs/ed-reznik).
+
+My research focuses on the relationship between obesity and cancer. More specifically, I am working on understanding how obesity influences the molecular biology of tumours and determining the likelihood that these differences may be related to how obesity is a major cancer risk factor.
+
+Previously, I completed my undergraduate degree in Microbiology and Immunology at UBC and worked as a research assistant in [Dr. Christian Steidl’s lab](https://www.bccrc.ca/dept/lcr/people/christian-steidl) at the British Columbia Cancer Research Centre developing prognostic models and studying Follicular Lymphoma cancer evolution.
+
+:::

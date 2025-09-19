@@ -1,0 +1,11 @@
+---
+title: "My Blog"
+description-meta: "Ethan Tse's Personal Website"
+page-navigation: false
+toc: false
+#sidebar: false
+page-layout: full
+listing:
+  contents: posts/blog
+  sort: date desc
+---

@@ -1,0 +1,27 @@
+---
+title: "Test Blog: Normal Distribution Demo"
+author: "Ethan Tse"
+date: "2025-09-18"
+categories: [statistics]
+jupyter: python3
+---
+
+Let's generate and plot a normal distribution using Python.
+
+```{python}
+#| echo: true
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+x = np.linspace(-4, 4, 1000)
+y = norm.pdf(x, loc=0, scale=1)
+
+plt.plot(x, y)
+plt.title("Standard Normal Distribution")
+plt.xlabel("x")
+plt.ylabel("Probability Density")
+plt.grid(True)
+plt.show()
+```
