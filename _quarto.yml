@@ -23,7 +23,7 @@ website:
 format:
   html:
     theme:
-      - minty
+      - flatly
       - brand
     css: styles.css
     toc: true

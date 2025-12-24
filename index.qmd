@@ -24,10 +24,9 @@ about:
 
 :::{#hero-heading}
 
-I am a 3rd year PhD Candidate at [Weill Cornell Medicine](https://www.weill.cornell.edu/) in the [Physiology, Biophysics, and Systems Biology program](https://gradschool.weill.cornell.edu/programs/pbsb), working with [Dr. Ed Reznik](https://www.mskcc.org/research-areas/labs/ed-reznik).
+I am a 3rd year PhD Candidate at [Weill Cornell Medicine](https://www.weill.cornell.edu/) in the [Physiology, Biophysics, and Systems Biology program](https://gradschool.weill.cornell.edu/programs/pbsb), working with [Dr. Ed Reznik](https://www.mskcc.org/research-areas/labs/ed-reznik) at the [Memorial Sloan Kettering Cancer Center](https://www.mskcc.org/).
 
-My research focuses on the relationship between obesity and cancer. More specifically, I am working on understanding how obesity influences the molecular biology of tumours and determining the likelihood that these differences may be related to how obesity is a major cancer risk factor.
+My research focuses on the relationship between obesity and cancer. More specifically, I use computational methods to understand how obesity influences the molecular biology of tumours and determining the likelihood that these differences may be related to how obesity is a major cancer risk factor.
 
-Previously, I completed my undergraduate degree in Microbiology and Immunology at UBC and worked as a research assistant in [Dr. Christian Steidl’s lab](https://www.bccrc.ca/dept/lcr/people/christian-steidl) at the British Columbia Cancer Research Centre developing prognostic models and studying Follicular Lymphoma cancer evolution.
-
+Previously, I completed my undergraduate degree in Microbiology and Immunology at [UBC](https://mbim.ubc.ca/) and worked as a research assistant in [Dr. Christian Steidl’s lab](https://www.bccrc.ca/dept/lcr/people/christian-steidl) at the British Columbia Cancer Research Centre developing prognostic models and studying Follicular Lymphoma cancer evolution.
 :::
