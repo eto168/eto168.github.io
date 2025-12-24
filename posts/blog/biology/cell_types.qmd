@@ -1,0 +1,35 @@
+---
+title: "Epithelial cells in cancer biology"
+author: "Ethan Tse"
+date: 2025-12-22
+date-modified: last-modified
+categories: [biology, cancer biology, cell types]
+engine: knitr
+---
+
+## Why this blog entry?
+
+I frequently forget what the major cancer cell types in cancer are and do. In this post, I will be covering **Epithelial cells**.
+
+## Epithelial cells
+
+**Epithelial cells** line the internal and external surfaces of the body. They display a high degree of polarity, namely apical-basal polarity, which separates the function of the two cells.
+
+## Epithelial vs Endothelial cells
+
+Endothelial cells are a subset of epithelial cells that line the blood vessels and are important for gas exchange.
+
+## Epithelial-mesenchymal transition (EMT)
+
+Epithelial-mesenchymal transition (EMT) is a widely studied process whereby epithelial cells acquire mesenchymal phenotypes upon downregulation of epithelial features. It is widely assocated with cancer pathogenesis and perhaps metastasis, and is therefore of interest to many cancer biologists.
+
+### Mesenchymal cells
+
+**Mesenchymal cells** are migrating cells that exhibit back-front polarity. They are highly mobile, as their role during homeostasis is to home to injuries for tissue repair.
+
+Hallmarks of this transition are the loss of apical-basal polarity, increase in cell motility, and a push for cells towards *intermediate* E/M states, allowing for high degrees of flexibility and thus invasive properties characteristic of many cancer cells.
+
+
+## Sources
+
+1. [EMT Nature Revews](https://www.nature.com/articles/s41580-020-0237-9)

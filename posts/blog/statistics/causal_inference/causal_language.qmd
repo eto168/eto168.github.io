@@ -1,0 +1,26 @@
+---
+title: "Causal language in computational biology research"
+author: "Ethan Tse"
+date: 2025-12-21
+date-modified: last-modified
+categories: [statistics]
+# engine: knitr
+format:
+  html:
+    code-fold: true
+---
+
+## Preamble
+
+My research is not explicitly on causal inference. However, I have received, many times, feedback that has pointed to my weakness where I inject "causal language" to describe my research on datasets and experimental designs where such causal interpretations are not possible. Therefore, I have come to appreciate that knowledge in this are is important to know what claims can be made from the data and experimental setup a researcher has. The express purpose of this is to document for myself how the statements I've made previously consititute and "overstepping" of causal interpretation.
+
+## Statistical vs Causal questions
+
+The distinction here falls between **association** and **causation**. In associative studies, we are interested in *describing* a system or a relationship between observed outcomes under two different settings. In causal studies, we are interested in
+
+
+
+
+## References
+
+1. [Warwick and Oxford Academy for PhD Training in Statistics](https://www.stats.ox.ac.uk/~evans/APTS/bias.html)

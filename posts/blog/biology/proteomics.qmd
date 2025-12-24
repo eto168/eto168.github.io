@@ -1,0 +1,150 @@
+---
+title: "An overview of Proteomics for Cancer Research"
+author: Ethan Tse
+date: 2025-12-22
+date-modified: last-modified
+toc: true
+toc-depth: 2
+categories: [biology, technical, computational biology, proteomics]
+format: html
+---
+# Proteomics
+
+The **Proteome** is the total proteins present in a cell, tissue, or organism at a given time. It is more difficult to study than genomics (DNA) because the DNA is generally constant across organisms and time. It is also more difficult to study than transcriptomes (RNA) because[^1]. Despite the many challenges, proteomics is a very informative data modality as it informs us on the presence and quantity of the true effector molecules in biological systems: proteins.
+
+A [great review](https://currentprotocols.onlinelibrary.wiley.com/doi/10.1002/0471140864.ps1601s62).
+
+## Background and History
+
+A good basic introduction is Thermofisher Scientific's [A tourist's guide](https://assets.thermofisher.com/TFS-Assets/CMD/brochures/xx-65639-ms-biologist-guide-proteomics-xx65639-en.pdf). A good start is why proteomics? As proteins play a crucial role in the structure and function of biological systems, we need to measure protein abundance relative to the stages of a biological system (e.g. differentiation, response to therapeutic intervention, and cell development). From a technical standpoint, the field often uses mRNA-seq as a surrogate to measure protein expression, primarily due to its relatively low cost, ease of access, and technical simplicity. However, several studies have noted that mRNA expression is only weakly correlated with protein expression, suggesting that mRNA differential expression does not necessarily reflect changes in protein abundance, which would be the true effector molecules.
+
+Proteomics was historically qualitative, but pushes have been made to make it both **qualitative** and **quantitative**. This brings up an important topic to understand: **What's the difference between traditional and new methods for protein quantification?**
+
+A classic method is **western blotting**, which is an immunoassay that is based on antibodies probing proteins. It has a simple protocol and is widely used. However, this method requires *a priori* knowledge of the system as you need to know which proteins to probe, and why a system would have an expected change in that protein. Another limitation is antibody availability: is that antibody available? Is it optimized? Can we afford a lot of antibodies to screen? Are there antibodies for specific protein modifications? Technical limitations include sample intensity, it is only *semi-quantitative*, has a linear dynamic range, and typically only characterizes one protein per experiment (though you can strip antibodies and re-probe, but with limitations).
+
+A more modern approach is **liquid chromatography coupled to mass spectrometry (LC-MS)**, which enables system-wide identification and quantification of proteins. It can be used for both discovery (untargeted) and validation (targeted) of protein abundance. Furthermore, it can also be used to probe specific posttranslational modifications (PTMs) and identify the location of the modified residue. Mass spec requires less sample than western blot, and does NOT use antibodies to identify/quantify proteins.
+
+Now, we've established that LC-MS can be used for discovery and/or validation. What's the difference? **Discovery** tries to identify as many proteins as possible while preserving the ability to measure relative protein abundance across samples. It optimizes **protein identification** by spending more time and effort per sample, but analyzes fewer samples. Discovery is most often used to inventory proteins in a sample or detect differences in the abundance of proteins between multiple samples. In contrast, **Validation** optimizes throughput of many (hundreds/thousands) of samples. This allows for high quantitative precision and accuracy. It is used after discovery to quantify specific proteins from the initial screen.
+
+In the following sections, we will discuss the standard proteomic workflow and some variations at a basic level.
+
+## Proteomics Workflow Basics
+
+At a surface level, the typical proteomics workflow can be crudely summarized by the following sequential steps (see Figure Figure 1):
+
+1. Protein Extraction
+2. Enzymatic Digestion
+3. Peptide Separation (see the High-Performance Liquid Chromatography (HPLC) section)
+4. Mass Spectrometry (see the Tandem Mass Spectrometry (MS/MS) section)
+5. Protein Identification (see Identifying Proteins: Database Search)
+6. Protein Quantification (see Proteomics Analysis Software)
+
+![](files/proteomics/basic_proteomics_workflow_usfhealth.png){width=100% fig-cap="Basic Proteomics Workflow from USF Health" #fig:basic_proteomics_workflow}
+
+## High-Performance Liquid Chromatography (HPLC) {#sec-hplc}
+
+**Reference:** [Tutorial from ThermoFisher Scientific](https://www.thermofisher.com/us/en/home/industrial/chromatography/chromatography-learning-center/liquid-chromatography-information/hplc-basics.html?erpType=Global_E1)
+
+**Reference:** [ThermoFisher: LC-MS information](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/mass-spectrometry-learning-center/liquid-chromatography-mass-spectrometry-lc-ms-information.html#:~:text=LC%20is%20also%20an%20ideal,gel%20electrophoresis%20for%20molecular%20separation.)
+
+HPLC is an analytical chemistry technique used to separate compounds in a chemical mixture. The separation is based on using pressure-driven flow of a **mobile phase** through a column packed with a **stationary phase**. The principle is that compounds would separate by how the physiochemical properties of the **analyte** interact with the **mobile phase** and **stationary phase**.
+
+The basic steps are:
+
+1. Mobile phase flows.
+2. **Add samples:** inject sample/analyte into the path of the mobile phase.
+3. **Separate Compounds:** the mobile phase carries the analyte through the stationary phase, leading to physical separation of compounds.
+4. **Analyte Detection:** an electrical signal is generated and you can detect target analytes.
+5. **Chromatogram Generation:** detected analyte signals are translated to a chromatogram (retention time vs analyte signal).
+
+In the context of proteomics, HPLC is used to separate out proteins and peptides from complex mixtures before running mass spectrometry. It is also very good at separating isomers, molecules with the same formula but different structures. Since mass spectrometers detect mass-to-charge ratio, they have a hard time telling isomers apart since they have the same mass. HPLC can be used to pre-separate them so they can be analyzed separately on the mass spectrometer.
+
+From an analysis perspective, the file output of the HPLC is a **chromatogram**, which is a graph with time on the x-axis and relative abundance on the y-axis. This graph shows the elution profile of the HPLC run and a peak at x = X, y = Y indicates a large amount of material eluted at time X and fed into the subsequent mass spectrometer. For more examples, see figure 16.1.5 in Zhang et al. (2010).
+
+The separated compounds/proteins/peptides are fed into the mass spectrometer in the order that they leave the LC column.
+
+## Tandem Mass Spectrometry (MS/MS or MS<sup>2</sup>) {#sec-tms}
+
+**Tandem Mass Spectrometry** (see Figure 2) is an extension of regular mass spectrometry. It uses two or more mass spectrometers to analyze peptides multiple times to improve resolution by separating ions multiple times based on their m/z ratios. This process occurs in roughly three steps: selection — fragmentation — detection.
+
+![](files/proteomics/tandem_mass_spec_wikipedia.png){width=50% fig-cap="Schematic of Tandem Mass Spectrometry. Source: Wikipedia" #fig:tms_scheme}
+
+The LC-separated analytes are fed into the first mass spectrometer, MS1, which outputs a resulting **mass spectrum** (see Figure 3). This mass spectrum represents peptide **precursor ions** and is used to select which peptides are fragmented into fragment ions and provided to the second mass spectrometer MS2 to be further analyzed (see the LFQ-DDA and LFQ-DIA sections for the two different ways of selecting). A typical MS/MS run generates sequence-informative fragment ions from a peptide (or many if all identified precursor ions are provided to MS2). Recall from the LC section that compounds are fed into MS1 as they elute from the HPLC column. Therefore, each peptide ion (or more precisely, compounds that elute at the same time from HPLC) gives a mass spectrum.
+
+What are the commonly observed peptide fragments from mass spectrometry? They are primarily produced by cleavage of amide bonds that join two amino acids. A table of commonly observed peptide fragment ions can be found in Zhang et al. (2010).
+
+The output of MS/MS is then subject to database search to identify which proteins the ions are from.
+
+![](files/proteomics/example_mass_spectrum_broad.png){width=50% fig-cap="Example Mass Spectrum from the Broad Institute" #fig:ex_mass_spectrum}
+
+## Identifying Proteins: Database Search {#sec-proteomics_database_search}
+
+After identifying the peptide ions from the mass spectra, we need to know which proteins they come from because the primary interest is proteins, not peptides. Database-search algorithms compare observed fragment patterns to theoretical spectra derived from protein sequence databases to assign peptide IDs, which are then rolled up to protein-level identifications.
+
+## Quantifying Proteins {#sec-proteomics_quantification}
+
+Quantifying proteins involves two major strategies: label-free approaches and isotopic labeling.
+
+## Label-Free vs Isotopic labeling
+
+In proteomics, there is a tradeoff between proteome coverage, sample throughput, method development, and reproducibility and precision. The choice of method is motivated by the biological question. Methods can be split into **isotopic labeling** or **label-free**.
+
+Conceptually, LFQ measures and compares protein abundances using the natural intensity of peptide signals measured by the mass spec. Isotopic labeling methods (SILAC, TMT, iTRAQ) label the peptides, and so quantification and comparisons are done on the **reporter ions**.
+
+First, let's discuss discovery-focused proteomics pipelines. In these cases, we want to identify and quantify (on a relative scale) the whole proteome. Several discovery techniques are: **stable isotope labelling by amino acids in cell culture (SILAC)**, **chemical labeling with isobaric mass tags**, and **label-free quantitation (LFQ)**.
+
+There are two types of LFQ: data-dependent acquisition (DDA) and data-independent acquisition (DIA). These differ in how the MS2 data is acquired.
+
+### LFQ-DDA {#sec-lfq_dda}
+
+In DDA, ions for a given m/z range are **individually isolated** and fragmented. Quantitation involves extracting peptide chromatograms (MS1 precursor ion) from LC-MS runs and integrating peak areas over the chromatographic time scale or using the intensity at the highest point of the chromatographic peak. The highest peaks and/or largest areas are the identified peptides that trigger MS2 acquisition. MS2 is used to further fragment the ions, allowing peptide identification by comparing to databases using software such as **MaxQuant**. DDA generates **high-quality MS2 spectra that are not chimeric and typically contain one peptide**.
+
+A chromatogram is the output of chromatography: each component ideally produces a peak (retention time vs signal). Signal is proportional to analyte concentration, so quantification can use peak area or peak height.
+
+![](files/chromatogram_example.png){width=80% fig-cap="Example of a chromatogram from Wikipedia" #fig:example_chromatography}
+
+After quantifying, you can compare areas and/or intensities across control and experimental samples. LFQ-DDA has good reproducibility and linearity at the peptide and protein levels. Samples are run individually, not pooled.
+
+![](files/thermofisher_LFQ_DDA.png){width=50% fig-cap="LFQ DDA Workflow from ThermoFisher" #fig:lfq_dda}
+
+### LFQ-DIA {#sec-lfq_dia}
+
+In DIA, a precursor mass range is divided into relatively wide (≈ 25 m/z) windows. For each window, the instrument fragments all precursor ions in that window, producing chimeric MS2 spectra that contain fragments from multiple co-isolated peptides. This differs from DDA: instead of isolating one precursor at a time, DIA fragments all precursors in each window. DIA therefore provides MS2 data for **all** detected precursors, improving coverage and reproducibility, but requires specialized software to deconvolve complex spectra.
+
+Quantification still typically relies on extracted chromatograms (MS1 precursors and/or MS2 fragment ions) and integrating peak areas across chromatographic time. Each sample is still run independently.
+
+![](files/thermofisher_LFQ_DIA.png){width=50% fig-cap="LFQ-DIA Schematic from ThermoFisher" #fig:lfq_dia}
+
+### Stable Isotope Labeling by Amino Acids in Cell Culture (SILAC)
+
+SILAC uses in vivo metabolic incorporation of "heavy" 13C- or 15N-labeled amino acids into the experimental group while control samples use the natural isotopes. These heavier isotopes behave the same chemically and biologically, enabling combined processing (mixing, digestion, LC-MS) while still being distinguishable by mass. Advantages include increased throughput and minimized sample manipulation.
+
+### Tandem Mass Tag (TMT) labeling
+
+TMT increases the number of samples that can be analyzed simultaneously (typically 2–16 channels) by using isobaric chemical tags. Each tag has:
+
+- An MS/MS reporter group
+- A spacer arm
+- An amine-reactive group (binds peptide N-termini or lysine residues)
+
+See [isobaric labeling on Wikipedia](https://en.wikipedia.org/wiki/Isobaric_labeling).
+
+Each sample is labeled with a distinct isotopic variant of the tag, and labeled samples are mixed and analyzed in one run. The tags are isobaric, so in MS1 they appear as a single peak; during MS2 fragmentation each tag releases a reporter ion whose intensity reflects the relative abundance of the peptide in each original sample. Quantification depends on the purity of the precursor ion population selected for MS2.
+
+## How does mass spec work?
+
+A spectrometer separates and measures spectral components of a physical sample. A mass spectrometer measures the mass-to-charge ratio (m/z) of ions. Samples are ionized, and ions are separated by electric/magnetic fields and then detected. Only ionized particles are detected.
+
+Briefly: extract proteins, digest to peptides, ionize peptides, run mass spectrometry. Each MS scan produces a mass spectrum (not the same as a chromatogram). Spectra are used to query databases for peptide IDs. Thousands of scans yield thousands of spectra. Peptide IDs are aggregated and quantified via peak intensities or spectral counts.
+
+![](files/mass_spec_pentane.png){width=50% fig-cap="Mass Spec of Pentane. Each line is an ion passing through the mass spec. The tallest line at m/z = 43 is the base peak — Source: LibreTexts chemistry" #fig:pentane_mass_spec}
+
+## What is MS1 and MS2?
+
+MS1 and MS2 follow from tandem mass spectrometry: the first mass analyzer (MS1) separates ions by m/z; selected precursors are fragmented and analyzed by MS2, which separates fragment ions by m/z and detects them. Ions from MS1 are called precursor ions; ions from MS2 are called fragment ions.
+
+## Proteomics Analysis Software {#sec-proteomics_software}
+
+Common tools for identification and quantification include MaxQuant, Proteome Discoverer, OpenSWATH, DIA-NN, Spectronaut, MSFragger, and others. Choice depends on acquisition strategy (DDA vs DIA), labeling strategy (LFQ, SILAC, TMT), and downstream analysis requirements.
+
+[^1]: Not sure yet.

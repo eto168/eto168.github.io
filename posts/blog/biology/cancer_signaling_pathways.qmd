@@ -1,0 +1,172 @@
+---
+title: "Common Oncogenic Signaling Pathways"
+author: Ethan Tse
+date: 2025-12-22
+date-modified: last-modified
+toc: true
+toc-depth: 2
+categories: [biology, cancer biology]
+format: html
+---
+# Introduction
+
+In this part of the appendix, we briefly describe the common oncogenic signaling pathways to build the biological intuition needed to interpret high-dimensional sequencing data. We focus on the pathways described in [Figure 1 of this paper](https://www.sciencedirect.com/science/article/pii/S0092867418303593?via%3Dihub).
+
+# PI3K/AKT/mTOR Pathway
+
+## Preamble
+
+This section is based in large part on the seminal reviews found [here](https://pmc.ncbi.nlm.nih.gov/articles/PMC5726441/).
+
+In brief, the PI3K/AKT/mTOR pathway bridges nutrient availability with cellular proliferation. Therefore, in the context of cancer, uncontrolled signaling from this pathway leads to excessive cellular proliferation, a hallmark of cancer.
+
+## Basic biology
+
+**Phosphoinositide 3-kinase (PI3K)** is an enzyme with 3 classes. Here, we focus on class I. Mammals express 4 isoforms: p110α, p110β, p110γ, and p110δ encoded by PIK3CA, PIK3CB, PIK3CG, and PIK3CD. p110α and p110β isoforms are expressed on nearly all cells, whereas p110γ and p110δ are preferentially expressed in immune cells.
+
+### Growth factors and PI3K
+
+PI3K responds to growth factors through growth factor receptor-coupled tyrosine kinase activities, small Ras-related GTPases, and heterotrimeric G proteins.
+
+Upon activation, PI3K phosphorylates the phospholipid PtdIns-4,5-P2 **(PIP2)**, found on all plasma membranes, to generate PtdIns-3,4,5-P3 **(PIP3)**. The activated form, PIP3, then acts as a second messenger to recruit cytoplasmic proteins to the plasma membrane.
+
+### Consequences of activation (Effectors)
+
+Among the most common effectors downstream of receptor-mediated PI3K signaling are members of the AKT sub-family of AGC serine/threonine kinases (AKT1, AKT2, AKT3).
+
+Another common effector is mTOR.
+
+## Mutagenesis of pathway components in cancers
+
+In normal cells, PIP3 is heavily regulated and only active transiently. It is rapidly metabolized by phosphatases including the tumour suppressor PTEN, which deactivates the signaling pathway to prevent constitutive proliferation signals.
+
+As such, PIK3CA is among the most common oncogenic mutations, as it leads to an abundance of PIP3. Furthermore, inactivating PTEN mutations offer an alternative way of keeping this pathway active by preventing deactivation. Indeed, PIK3CA and PTEN were found to be the second and third most highly mutated genes in human cancers.
+
+## PI3K pathway in metabolism
+
+PI3K signaling is an evolutionarily conserved pathway to respond to environmental cues (e.g. nutrient availability) to regulate cell/organism growth. As mentioned above, PI3K activity is receptor-mediated, and these receptors often bind growth factors. Common ones include PDGF receptor (PDGFR) and epidermal growth factor receptor (EGFR), which drive proliferation and migration; insulin-like growth factor receptor (IGFR), which stimulates growth and survival; and insulin receptor (INSR), which regulates metabolic homeostasis. Upon receiving their ligands, these receptors can then activate the PI3K pathway to regulate cell growth.
+
+# mTOR Pathway
+
+## Preamble
+
+The content in this section is in large part from the seminal review(s) found [here](https://www.nature.com/articles/s41568-018-0074-8).
+
+While we briefly described mTOR signaling as an effector of the PI3K pathway, it is prominent enough to warrant its own section.
+
+In brief, mTOR is a serine/threonine kinase and a master regulator of cell growth and cellular metabolism. It promotes **anabolism** (building larger molecules from smaller ones) through processes such as ribosome biogenesis, protein, nucleotide, fatty acid, and lipid synthesis, and downregulates catabolic processes such as autophagy (lysosome-driven degradation of cellular components).
+
+As such, it is commonly activated in cancer cells, contributing to cellular proliferation and metabolic adaptations.
+
+## Basic biology
+
+**Mammalian target of rapamycin (mTOR)** is named after rapamycin, an anti-fungal drug that was discovered to have anti-cancer properties.
+
+As mentioned above, it is a kinase that helps make up two distinct complexes, **mTORC1** and **mTORC2**.
+
+### mTORC1
+
+mTORC1 is activated by growth factors through the PI3K-AKT signaling pathway (covered above). Growth factors that activate mTORC1 include **insulin**.
+
+### mTORC2
+
+mTORC2 can be activated solely by growth factors.
+
+### Signaling effectors
+
+Both mTORC1 and mTORC2 regulate cell growth and metabolism by either 1) phosphorylating metabolic enzymes or 2) through downstream signaling effectors.
+
+# NF-κB Pathway
+
+## Preamble
+
+This section is based in large part on the seminal review found [here](https://www.nature.com/articles/sigtrans201723).
+
+The NF-κB pathway is one of the primary intracellular immune signaling pathways. It mediates the expression of **pro-inflammatory** genes, intended to be protective in response to infections and tissue damage. However, due to its pro-inflammatory nature, its dysregulation is a hallmark of chronic inflammatory diseases such as cancer and obesity.
+
+## Basic biology
+
+**Nuclear factor-κB (NF-κB)** is a family of inducible transcription factors which regulate many genes involved in immune and inflammatory responses.
+
+Under this family, there are 5 structurally related members:
+
+- NF-κB1 (p50)
+- NF-κB2 (p52)
+- RelA (p65)
+- RelB (p65)
+- c-Rel (p65)
+
+Together, they regulate the expression of target proteins by binding to a specific DNA element, the **κB enhancer**, as hetero- or homo-dimers.
+
+As these regulate immune and inflammatory processes, they are tightly regulated in the cytoplasm by a family of inhibitor proteins (e.g. IκB) and the precursors of NF-κB1 and NF-κB2 through sequestration.
+
+There are two major signaling pathways that activate NF-κB, divided into the **canonical** and **non-canonical** pathways.
+
+### Canonical pathway
+
+The canonical pathway responds to cytokine receptors, pattern-recognition receptors (PRRs), TNF receptor (TNFR) superfamily members, as well as T- and B-cell receptors.
+
+This pathway works primarily by **degrading inhibitory proteins** (i.e. releasing the brake). Specifically IκBα is degraded through site-specific phosphorylation by a multi-subunit IκB kinase (IKK) complex. Once activated (e.g. by cytokines, growth factors, mitogens, microbial components, and stress agents), IKK phosphorylates IκBα at two N-terminal serines, leading to ubiquitin-dependent protein degradation. Together, this allows NF-κB members (e.g. p50/RelA and p50/c-Rel dimers) to quickly translocate into the nucleus to bind the κB enhancer and induce transcription.
+
+### Non-canonical pathway
+
+The non-canonical pathway differs in terms of what stimuli it responds to, as well as the mechanism by which NF-κB is allowed to carry out its functionality.
+
+This pathway responds specifically to ligands of a subset of TNFR superfamily members, namely LTβR, BAFFR, CD40, and RANK. These proteins correspond to cell-differentiating and developmental stimuli.
+
+Mechanistically, the non-canonical pathway does not degrade IκBα to "release the brakes"; rather, it helps process the precursor of NF-κB2 (p52), p100, into the activated form, NF-κB2 (p52). This then allows p52 translocation into the nucleus as a dimer with RelB (a p52/RelB dimer).
+
+### How do the two pathways relate?
+
+It appears that the canonical pathway is designed to be broadly involved in the immune response, while the non-canonical pathway more specifically regulates adaptive immune responses.
+
+### What cells is the NF-κB pathway active in?
+
+As the NF-κB pathway mediates inflammatory responses, it is active in innate immune cells as well as adaptive immune cells such as T cells.
+
+## NF-κB in innate immune cells
+
+Innate immune cells include macrophages, dendritic cells, and neutrophils. Characteristics of these cells are that they express PRRs that detect conserved microbial components, pathogen-associated molecular patterns (PAMPs), as well as damage-associated molecular patterns (DAMPs) released by necrotic cells and damaged tissues.
+
+::: aside
+PRRs include toll-like receptors, RIG-I like receptors, NOD-like receptors, C-type lectin-like receptors and cytosolic DNA sensors.
+:::
+
+These PRRs, once stimulated, commonly activate the canonical NF-κB pathway to activate the transcription of pro-inflammatory cytokines (cell communication), chemokines (cell recruitment), and other inflammatory mediators. Together, this cocktail of released cytokines can directly promote inflammation and promote the differentiation of inflammatory T cells.
+
+### In macrophages
+
+More specifically to **macrophages**, NF-κB is a key transcription factor that induces the expression of pro-inflammatory cytokine/chemokine genes, and polarization to the M1 phenotype (pro-inflammatory). These M1 macrophages promote the differentiation of inflammatory T cells, including Th1 (by IL-12) and Th17 subsets.
+
+Pro-inflammatory cytokines released by M1 macrophages include:
+
+- IL-1
+- IL-6
+- IL-12
+- TNF-α
+- other chemokines
+
+Anti-inflammatory cytokines released by M2 macrophages include:
+
+- IL-10
+- IL-13
+
+## NF-κB in T cells
+
+In the adaptive immune compartment, NF-κB signaling is particularly important in **CD4+ T-helper (Th)** cells. As described above in the macrophage section, NF-κB promotes pro-inflammatory cytokine expression in macrophages, which helps T cells differentiate into the pro-inflammatory Th1 and Th17 phenotypes.
+
+Here, we add that NF-κB additionally regulates TCR signaling, meaning that it regulates T-cell functions both from extracellular cytokine signaling as well as intracellular signaling.
+
+Naive T cells are activated when their T-cell receptor (TCR) engages with a major histocompatibility complex (MHC) with a cognate antigen presented by an antigen-presenting cell, mostly dendritic cells. Members of the canonical NF-κB pathway, RelA and c-Rel, play a central role in regulating TCR signaling that enables naive T-cell activation.
+
+# TGFβ Pathway
+
+# p53 Pathway
+
+# Myc Pathway
+
+# Notch Pathway
+
+# RAS/MAPK Pathway
+
+# JAK-STAT Pathway

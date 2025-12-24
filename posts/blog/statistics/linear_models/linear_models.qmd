@@ -1,0 +1,59 @@
+---
+title: "The `lm()` function in R"
+author: "Ethan Tse"
+date: 2025-12-21
+date-modified: last-modified
+categories: [statistics, linear models, computation]
+# engine: knitr
+format:
+  html:
+    code-fold: true
+---
+
+## Preamble
+
+I think linear models are among the most commonly used tools in biomedical research, and I think it would be to the benefit of many to have a better understanding of such a fundamental tool.
+
+Linear models also sit at the core of many statistical methods and machine learning models, which is why they appear so prominently in statistics and data science courses. Althought they appear simple, they are deceptively complex, with many statisticians spending their entire careers learning and developing techniques to improve linear models.
+
+As such, decades of methodological work have expanded their flexibility, allowing them to handle surprisingly complex experimental designs while remaining relatively easy to interpret. This balance between expressiveness and interpretability is a major reason they continue to be used so widely.
+
+Throughout my training, I have generally been encouraged to start with linear models and to move on to more complex approaches only when simpler ones are clearly inadequate. In practice, especially in biomedical research, more sophisticated models often need to perform substantially better than linear models to justify the added complexity and loss of interpretability. This trade-off becomes particularly important when the goal is **inference**—understanding relationships in the data—rather than **prediction**.
+
+In this post, I focus on the most basic case: linear regression, which can be viewed as a building block for more advanced linear modeling frameworks.
+
+Because the emphasis here is on [**computation**], I will keep the theoretical discussion light. Readers interested in the statistical foundations of linear models can refer to upcoming posts in the [**theory**] series.
+
+We will work primarily with the `stats::lm()` function in R (which I think is a language very well suited for classical statistical analysis), and explore how it behaves in practice, its many function arguments, and how to interpret its output.
+
+## Linear models in R
+
+```{r}
+#| echo: true
+
+# load libraries
+library(ggplot2)
+library(titanic)
+```
+
+```{r}
+# visualize the dataset
+
+knitr::kable(head(titanic_train))
+```
+
+```{r}
+# fit a linear model
+
+fit <- stats::lm(Fare ~ Age, data = titanic_train)
+fit
+```
+
+When we call `stats::lm` in R, we are calling the `lm()` function from the base `stats` package. When we "fit" a linear model, we are
+
+
+## Disclaimer
+
+This writeup represents my knowledge of the topic, and I by no means claim to be an expert.
+
+Please [Email me](ethantse42@gmail.com) with any comments.

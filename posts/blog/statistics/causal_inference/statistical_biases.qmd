@@ -1,0 +1,25 @@
+---
+title: "Biases in statistics"
+author: "Ethan Tse"
+date: 2025-12-21
+date-modified: last-modified
+categories: [statistics]
+# engine: knitr
+format:
+  html:
+    code-fold: true
+---
+
+## Mediators, confounders, and collider variables in Causal Inference
+
+## Confounding Bias
+
+## Selection Bias
+
+## Bias due to conditioning on a mediator
+
+## Collider Bias
+
+## References
+
+1. [Warwick and Oxford Academy for PhD Training in Statistics](https://www.stats.ox.ac.uk/~evans/APTS/bias.html)

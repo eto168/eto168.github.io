@@ -1,0 +1,405 @@
+---
+title: "An overview of methods in Single-cell RNA-seq"
+author: Ethan Tse
+date: 2025-12-22
+date-modified: last-modified
+toc: true
+toc-depth: 2
+categories: [biology, technical, computational biology]
+format: html
+---
+
+This article serves as an overview of the *current* single-cell RNA-seq data analysis landscape. Due to the popularity of two major software packages across R and python - Seurat and Scanpy - this document will focus on the methods implemented by these packages.
+
+# Introduction
+
+## Challenges
+
+### PCR Amplification and UMIs
+
+scRNA-seq poses unique challenges over bulk RNA-seq. From a sample preparation level, the low number of mRNA transcripts from individual cells (as opposed to thousands per sample) necessitates more PCR amplification cycles to get sufficient nucleotide material for sequencing [@townes_feature_2019]. Therefore, many *read counts* are duplicates of original genetic material. In scRNA-seq, it is advantageous to add **unique molecular identifiers (UMIs)** to each molecule before PCR amplification. This allows for computational deconvolution, as all PCR duplicates would share the same UMI and thus can be removed. These de-duplicated read counts are known as **UMI Counts**.
+
+### Compositional nature of RNA-seq data
+
+# Basic Quality Control for Count Matrices
+
+This section covers quality control at the level of raw count matrices. We assume you are working with **filtered** 10X Genomics `cellranger` aligned output matrices.
+
+By *basic quality control*, we mean measures such as **mitochondrial content**, **ribosomal content**, **number of reads per cell**, **number of genes per cell**, etc. More advanced QC such as **doublet detection** and **ambient RNA removal** are considered in the next section.
+
+We will describe each of these features, how to compute them in Scanpy, and how they are used to filter cells.
+
+## Common QC Metrics
+
+### Mitochondrial Fraction
+
+Filtering by reads mapping to mitochondrial reads are so common that it deserves its own little section. A high proportion of reads coming from **Mitochondrial DNA** is often taken to be a sign low quality/dying cells.
+
+This metric is calculated on the **raw/UMI counts** on a **per-cell basis**, and is defined as:
+
+$$
+\text{Percent counts mt} = \frac{\text{Reads mapping to mtDNA}}{\text{Total Reads in cell}}
+$$
+
+Depending on if you are doing single-*cell* or single-*nucleus* sequencing, you would expect almost none in the latter as the mitochondria are in the cytoplasm.
+
+### Other common metrics
+
+Aside from using reads mapping to mtDNA for QC, in some contexts, ribosomal reads are also considered, albeit less often. There are a set of other common QC metrics that are calculated at the **gene** or **cell** levels, and it is important to distinguish the two.
+
+The following metrics are described in Scanpy's documentation as well as in the scater paper [@mccarthy_scater_2017].
+
+### In Scanpy
+
+In scanpy, the `sc.pp.calculate_qc_metrics()` function calculates the following **gene-level** QC metrics:
+
+- `n_cells_by_counts`: number of cells that have at least one read mapping to this gene
+- `mean_counts`: the mean counts of this gene
+- `log1p_mean_counts`: the shifted logarithm of the mean counts
+- `pct_dropout_by_counts`: number of cells that don't have a read mapping to this gene
+- `total_counts`: total counts mapping to this gene
+- `log1p_total_counts`: shifted logarithm of total counts mapping to this gene
+
+and **cell-level** QC metrics:
+
+- `n_cells_by_counts`: number of cells this expression is measured in
+- `log1p_n_cells_by_counts`: shifted log of `n_cells_by_counts`
+- `total_counts`: total reads mapping to this cell
+- `log1p_total_counts`: shifted log of `total_counts`
+- `pct_counts_in_top_X_genes`: X is the number of genes, so it details what percent of counts in this cell maps to the top X genes. A high value may indicate low library complexity (bad capture of RNA molecules) and other technical artifacts.
+- `total_counts_mt`: total reads mapping to mtDNA in this cell
+- `log1p_total_counts_mt`: shifted log of `total_counts_mt`
+- `pct_counts_mt`: percentage of reads mapping to mtDNA in this cell
+
+## Filtering
+
+After computing metrics from the raw count matrix, how do you use them filter out low-quality cells? There are two proposed ways: **thresholding** and **dynamic** filtering, both with their strengths and weaknesses.
+
+### Threshold Filtering
+
+**Thresholding filtering** uses hard cutoffs to filter out potential low-quality cells. For example, you may choose a cutoff, say ≤ 20% mitochondrial content.
+
+### Adaptive Filtering
+
+**Adaptive filtering** uses the distribution of the metrics to determine outlier cells. This method assumes that most cells are of good quality, and so outliers can be identified from the distribution of cell qualities. One metric to determine if cells are outliers is the **Median Absolute Deviation**, defined as:
+
+$$
+\text{MAD} = \text{median}(|x_i - \text{median}(X)|)
+$$
+
+It is a measure of statistical dispersion like standard deviation, but is used for filtering single cells because it is a **robust statistic**, meaning it is less sensitive to outliers. Since our assumption is that most cells are of good quality, this means that bad quality cells are likely outliers and we don't want them to affect our measure of dispersion.
+
+The decision rule is as follows:
+
+$$
+\text{Outlier} =
+\begin{cases}
+\text{Yes}, & \text{if } \mathrm{MAD} \geq n \\
+\text{No}, & \text{otherwise}
+\end{cases}
+$$
+
+where n is some value analogous to how many standard deviations away constitute an outlier. Often, this value is something between 3 (recommended in the OSCA book) and 5 (recommended in the sc-best-practices book).
+
+In studies with many samples and projects, it is increasingly preferable to use this automatic filtering metric.
+
+## Basic QC plots
+
+In many instances, it helps to visualize the relationship between QC metrics to see if the filtering you choose is suitable for your dataset.
+
+### Violin plots of common metrics
+
+These plots show the distribution of each metric across all cells.
+
+# Advanced QC for Count Matrices
+
+Advanced QC metrics are not always necessary, and depend largely on your scientific question. Nonetheless, they are important and are briefly covered here.
+
+## Doublet Detection
+
+**Doublets** are an especially big problem for droplet-based single-cell technologies such as the popular 10X Genomics platform. Doublets are when more than one cell is fed into a bead, and so when sequenced, there will be more genetic material than one would expect from an individual cell.
+
+# Normalization
+
+In Seurat, normalization is log-transformation and scaling by some factor (recall that normalization encompasses scaling and transformation).
+
+# Feature Selection
+
+## Preamble
+
+**Feature selection** is a process of selecting a subset of features that are "informative" and/or highly varying. In the case of scRNA-seq, it is used to reduce the number of genes (which can be up to 30,000 sequenced per cell) that defines each droplet, thus acting as a form of **dimensionality reduction**. Ideally, this process removes non-informative genes that either mostly zero counts or vary minimally across *samples*. For experiments that sequence single cells of a given tissue (most common) an underlying assumption is that only a small fraction of genes are informative and biologically varying [@townes_feature_2019]. This is because most gene expression differences are expected to be across tissues.
+
+Feature selection is a very important step, as it helps to identify the variable features that are then used to generate principal components, inform clustering, and therefore cell typing. The Theis lab has benchmarked the impact of feature selection on downstream analyses in this Nature Methods article.
+
+In this section, we will go through several popular methods. As with many things in scRNA analyses, there are many established methods. For a tabular summary, see Table 1.
+
+## Mean Variance Plot
+
+### Implementation in Seurat
+
+This is a relatively simple method, published in the original 2015 Seurat paper. The mean and dispersion[^1] of each feature is computed. Then, features are binned by average expression and a z-score is calculated for dispersion per bin. This is done to learn which genes are variable, given it is in a range of means. That is, which genes have highly variable dispersion given they are in a set bin of means. Evidently, the number of bins is a crucial parameter to select and document.
+
+### Implementation
+
+Mean Variance Plot is implemented in both Seurat and Scanpy:
+
+- Seurat: `FindVariableFeatures(selection.method = "mvp")`
+- Scanpy: `scanpy.pp.highly_variable_genes(batch_key=None, flavor="seurat")`
+
+[^1]: Dispersion here is NOT the same as the variance. It refers to the variance-to-mean ratio σ^2/μ, and is mostly used for count data.
+
+## Dispersion (Seurat) {#sec:scrna_dispersion}
+
+### Background
+
+**NOTE: This method is obsolete, but is included for completeness.** **NOTE: This method has no associated publication. See the code under the `DISP` function for implementation reference.**
+
+### Algorithm in Seurat
+
+This process selects the top n features ranked by dispersion (σ^2/μ), which is related, but not equivalent to using the coefficient of variation (σ/μ), which uses the standard deviation (sd = √σ^2).
+
+### Implementation
+
+Mean Variance Plot is implemented in Seurat in `FindVariableFeatures(selection.method = "disp")`.
+
+### Comments
+
+I have not been able to find why VST is recommended over this method. There is a GitHub issue discussing this, but no clear theoretical conclusion to my understanding.
+
+## Variance Stabilizing Transformation
+
+### Background
+
+**Variance Stabilizing Transformation (VST)** is an applied statistic technique that involves transforming data for visualization (exploratory data analysis) and/or making the data amenable to use regression models. It is a type of method, and there is no single VST method. For example, a log-transform is a VST under some conditions. In bioinformatics, it is a widely applied method in analyzing RNA-sequencing data due to its discrete nature and heteroskedasticity. Its use predates single-cell RNA-seq, being used in popular R packages such as DESeq2 to normalize and visualize bulk RNA-sequencing data.
+
+### Why is VST needed?
+
+VST is used to model a mean-variance relationship (ex. σ^2 = μ for Poisson and σ^2 = μ + αμ^2 for Negative Binomial) as commonly seen in RNA-seq count data where larger means have larger variances. This is necessary for feature selection through identifying highly variable genes (that is, genes with high variance) as the variance is not directly comparable if it is not constant as a function of the mean. Without applying a VST, genes with higher means (higher expressed) will be selected as they will have, by heteroskedasticity, a higher variance, even if they are actually not biologically varying. A VST is intended to reduce the dependence of the variance on the mean.
+
+### Seurat's version of VST
+
+It is important to note that in the Seurat workflow, VST for feature selection is *independent* of normalization (e.g. log-transform and scaling by some factor) because log-transformation fails to adequately account for the mean-variance relationship (especially when that relationship is more complex).
+
+As described in the Cell paper, the mean-variance is learned from the data. The *un-normalized* counts/UMI are used to compute the mean and variance of each gene, which are then log10-transformed. A non-linear curve is then fitted using a local fitting of polynomials of degree 2 (loess), which serves as a regularized estimator of variance given the mean of a feature. This estimated function can be used to standardize feature counts without removing higher-than-expected variation. That is, a Z-score transformation normalized with a mean-controlled standard deviation:
+
+$$
+z_{ij} = \frac{x_{ij} - \bar{x}_i}{\sigma_i}
+$$
+
+where z_ij is the standardized value of feature i in cell j, x_ij is the raw value of feature i in cell j, \bar{x}_i is the mean raw value for feature i, and σ_i is the expected standard deviation of feature i derived from the global mean-variance fit.
+
+And enforcing clipping for technical outliers:
+
+$$
+z_{ij} \le \sqrt{N}
+$$
+
+where N is the total number of cells.
+
+The resulting variance of these standardized counts represents mean-adjusted variances and can be ranked to select highly variable genes (Seurat default returns the top 2000).
+
+### Availability and Implementation
+
+VST is implemented in both Seurat and Scanpy:
+
+- Seurat: `FindVariableFeatures(selection.method = "vst")`
+- Scanpy: `scanpy.pp.highly_variable_genes(batch_key=None, flavor="seurat_v3" or "seurat_v3_paper")`
+
+### Comments
+
+This method is largely the most common method of finding highly variable genes. In Seurat, an alternative is a newer method: *scTransform*. In Scanpy, VST is still the most common method as *scTransform* is not implemented in the package.
+
+## Pearson Residuals: scTransform (Seurat)
+
+### TL;DR
+
+The method of Pearson residuals fits a negative binomial generalized linear model using sequencing depth as a covariate and takes the Pearson residuals as the normalized UMI counts because residuals are essentially variance unexplained by the model, which in this case is sequencing depth. Thus, the residuals are the "biological variability" of interest.
+
+### Background
+
+scTransform does not strictly fall under a feature selection method. Rather, it is a *normalization* method that happens to also help with feature selection. That is, it is largely intended as an alternative to the scaling (e.g. by some library size) and transformation (e.g. by log transform) approach of normalization. The most common is the Shifted Logarithm:
+
+$$
+\log\left(\frac{n_{ij}}{S} + 1\right)
+$$
+
+where n_ij is the raw count of gene i in cell j and S is some scaling factor.
+
+S is often global like S = 10,000, but are sometimes estimated cell-specific factors (e.g. in scran). If S = 1,000,000, then you would get Counts Per Million (CPM). The +1 is called a pseudocount to deal with 0 counts, as you cannot take log(0).
+
+The authors argue that the strengths of this method are:
+
+1. Avoids heuristics of common normalization methods such as pseudocount addition, log-transform.
+2. Do not assume fixed library size for any cell.
+3. Learns mean-variance relationship.
+4. Data-driven VST.
+
+In this section, we will focus on the feature selection component of scTransform.
+
+### Algorithm of V1 in Seurat
+
+**NOTE: This section is for V1, which is described in the original paper. There is an updated version V2.**
+
+The crux of why scTransform can be used to select HVGs is that it both normalizes the data and performs a variance stabilizing transformation (VST). Loosely, scTransform fits a generalized linear model, specifically a negative binomial regression model to the UMI data. It models the UMI abundance using sequencing depth as a predictor.
+
+The GLM is formalized using a log link function:
+
+$$
+\log(\mathbb{E}(x_i)) = \beta_0 + \beta_1 \log_{10}(m)
+$$
+
+where x_i is the vector of UMI counts assigned to gene i and m is the vector of molecules assigned (sequencing depth) to the cells, j, so m_j = Σ_i x_{ij}.
+
+Negative binomial regression does not have an error term, unlike simple linear regression. We encode the model probabilistically:
+
+$$
+P(x_i \mid m) \sim \mathrm{NB}(\mu, \theta) \\
+\mu = \exp(\beta_0 + \beta_1 \log_{10}(m))
+$$
+
+where θ is the overdispersion parameter.
+
+As the paper showed that modeling each gene individually leads to overfitting especially for low-abundance genes due to high variance (an overestimation of true variance), they regularize all model parameters by sharing information across genes. Regularization is conducted in 3 steps:
+
+- Fit a NB regression model on each gene, estimating the parameters.
+- Using μ = β_0 + β_1 log(m), use kernel regression estimate to learn global trends in the data. Regularize on a per-parameter basis (i.e. share information across all genes).
+- Using the regularized parameters, compute the Pearson residuals.
+
+Quickly recall what a "normal" residual is: it is the difference between the actual and predicted value:
+
+$$
+z_{ij} = x_{ij} - \mu_{ij}
+$$
+
+Pearson residuals are similar to "normal" residuals from a linear regression, but are scaled by the standard deviation to account for heteroskedasticity:
+
+$$
+z_{ij} = \frac{x_{ij} - \mu_{ij}}{\sigma_{ij}}
+$$
+
+where
+
+$$
+\sigma_{ij} = \sqrt{\mu_{ij} + \frac{\mu_{ij}^2}{\theta_i}}
+$$
+
+In scTransform, these z_{ij}, the Pearson residuals, are the normalized UMI counts, as they are the "variance unexplained by technical factors such as library size".
+
+To reduce the impact of outliers similar to in VST above, the authors enforce:
+
+$$
+z_{ij} \le \sqrt{N}
+$$
+
+where N is the total number of cells.
+
+### Feature Selection using scTransform
+
+The Pearson residuals transformation doubles as a variance stabilizing transformation, which is what allows scTransform to simultaneously normalize and select features.
+
+With the variance stabilized, the Pearson residuals (aka normalized UMI counts) can be used directly to find HVGs. For each gene, plot the variance of the Pearson residuals z_i. Rank these by variance, and select the top n = 2000. This gives you a list of HVGs.
+
+### scTransform V2
+
+scTransform updated to v2. See the docs.
+
+### Implementation
+
+scTransform is implemented in Seurat:
+
+- Seurat: `SCTransform(object, vst.flavor = "v2")`
+
+### Comments
+
+scTransform has been argued to be a poorly specified model. Supporting literature may be this and this paper(s), but I am personally not up to date on this argument. The latter paper motivated the update to scTransform V2.
+
+If you use scTransform, use the updated version: `vst.flavor = "v2"`.
+
+If you use scTransform, it replaces 3 normalization functions:
+
+- Log normalization (`log(x/10000 + 1)`): `NormalizeData()`
+- Scale and center data (mean = 0, sd = 1): `ScaleData()`
+- Select HVGs ("mvp", "vst" etc.): `FindVariableFeatures()`
+
+The `vars.to.regress` option is used to apply a *second round* of NB regression, in addition to the first, regularized model with sequencing depth.
+
+First:
+$$
+\log(\mathbb{E}(x_i)) = \beta_0 + \beta_1 \log_{10}(m)
+$$
+
+Second:
+$$
+\log(\mathbb{E}(x_i)) = \beta_{0\mathrm{reg}} + \beta_{1\mathrm{reg}} \log_{10}(m) + \beta_2(p)
+$$
+
+where reg indicates they are fixed, regularized parameters from the first set of regressions, while β_2 can be freely estimated.
+
+## Deviance
+
+### Background
+
+As with Pearson Residual methods, a central concern are the effects of the heuristic steps used in common normalization (pseudocount addition, log-transformation) as the choice of the pseudocount is arbitrary and can subtly bias transformed data [@townes_feature_2019]. Townes et al., 2019 argue that the highly variable genes method is susceptible to arbitrary pseudocount addition as very small pseudocount values will increase the variance of genes with zero counts.
+
+Therefore, in this section, we will cover the Deviance method proposed by Townes et al., 2019, which covers both feature selection and dimensionality reduction.
+
+### What is Deviance?
+
+**Deviance** is a goodness-of-fit statistic for a statistical model. It generalizes the sum of squared residuals in ordinary least squares to cases where the model is fit using maximum likelihood estimation. It is often used for generalized linear models.
+
+### Deviance in scRNA-seq
+
+**Deviance** is an alternative that, supposedly, is more robust to outliers.
+
+Table 1: Common feature selection methods in scRNA-seq.
+
+| Approach           | Software | Brief Description            | Ref. |
+|--------------------|----------|------------------------------|------|
+| VST                | S, SCP   | Fit curve to Mean-variance   | [Cell paper](https://www.sciencedirect.com/science/article/pii/S0092867419305598?via%3Dihub) |
+| Mean Variance Plot | S, SCP   | Rank within-bin dispersion   | [Seurat paper](https://www.nature.com/articles/nbt.3192) |
+| Dispersion         | S, SCP   | Rank absolute dispersion     | [Code](https://rdrr.io/github/satijalab/seurat/src/R/preprocessing5.R) |
+| Pearson Residuals  | S        | Use residuals from NB glm    | [V1](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1), [critique](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02451-7), [V2](https://satijalab.org/seurat/archive/v4.3/sctransform_v2_vignette) |
+| Deviance           | SCP      | Multinomial Model            | [Paper1](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1861-6), [Paper2](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02136-7) |
+
+*S = Seurat, SCP = Scanpy.*
+
+# Dimension Reduction
+
+This section covers a second round of dimensionality reduction. We first reduced dimensions by identifying HVGs, now we proceed by using **Principal Component Analysis**.
+
+## Principal Component Analysis (PCA)
+
+**PCA** is a linear dimensionality reduction method. Given a covariance matrix, it finds a set of orthonormal basis vectors, termed eigenvectors, and their associated eigenvalues. The eigenvectors are the "new" axes, composed of linear combinations of the original features, and the eigenvalues correspond to the variance explained by the corresponding eigenvector.
+
+In single-cell analysis, we want to compute these "new" axes, which are essentially meta-features designed to maximize variance (of the original dataset) explained, and use them as the new dimensions, often much smaller than the original features.
+
+How do we choose how many of these "new" axes to use? By definition, PCA computes p−1 principal components, where p is the number of features. If we use all the PCs we computed, then we essentially have not reduced the dimension at all.
+
+By convention, most people use the first 50 PCs, but there are ways to check if you need to use more. In Scanpy, you use the Variance Ratio:
+
+$$
+\frac{\text{Variance Explained by PC}}{\text{Total Variance Explained by All PCs}}
+$$
+
+where
+
+$$
+\sum_{i=1}^p \text{Variance Explained by PC}_i
+$$
+
+# Neighborhood Graph
+
+# Clustering
+
+# Batch Correction
+
+Here, we discuss the dreaded issue in single-cell: **batch effects**. These are technical variations that do not reflect biological differences. The space in which these technical variations can arise in is vast. Commonly described batch effects include different sequencing machines, runs, different technicians, different institutions, etc.
+
+Thus, we need to adjust for these differences before running any integrated analyses.
+
+## Diagnosing the quality of integration
+
+# Cell Type Identification
+
+# Differential Gene Expression Analysis
+
