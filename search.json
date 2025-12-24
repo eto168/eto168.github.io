@@ -4,28 +4,434 @@
     "href": "blog.html",
     "title": "My Blog",
     "section": "",
-    "text": "Test Blog: Normal Distribution Demo\n\n\n\n\n\n\n\n\nSep 18, 2025\n\n\nEthan Tse\n\n\n\n\n\nNo matching items"
+    "text": "Epithelial cells in cancer biology\n\n\n\n\n\n\n\n\nDec 22, 2025\n\n\nEthan Tse\n\n\n\n\n\n\n\n\n\n\n\n\nAn overview of Proteomics for Cancer Research\n\n\n\n\n\n\n\n\nDec 22, 2025\n\n\nEthan Tse\n\n\n\n\n\n\n\n\n\n\n\n\nCommon Oncogenic Signaling Pathways\n\n\n\n\n\n\n\n\nDec 22, 2025\n\n\nEthan Tse\n\n\n\n\n\n\n\n\n\n\n\n\nAn overview of methods in Single-cell RNA-seq\n\n\n\n\n\n\n\n\nDec 22, 2025\n\n\nEthan Tse\n\n\n\n\n\n\n\n\n\n\n\n\nCausal language in computational biology research\n\n\n\n\n\n\n\n\nDec 21, 2025\n\n\nEthan Tse\n\n\n\n\n\n\n\n\n\n\n\n\nBiases in statistics\n\n\n\n\n\n\n\n\nDec 21, 2025\n\n\nEthan Tse\n\n\n\n\n\n\n\n\n\n\n\n\nThe lm() function in R\n\n\n\n\n\n\n\n\nDec 21, 2025\n\n\nEthan Tse\n\n\n\n\n\n\n\n\n\n\n\n\nTest Blog: Normal Distribution Demo\n\n\n\n\n\n\n\n\nSep 18, 2025\n\n\nEthan Tse\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Ethan Tse",
     "section": "",
-    "text": "I am a 3rd year PhD Candidate at Weill Cornell Medicine in the Physiology, Biophysics, and Systems Biology program, working with Dr. Ed Reznik.\nMy research focuses on the relationship between obesity and cancer. More specifically, I am working on understanding how obesity influences the molecular biology of tumours and determining the likelihood that these differences may be related to how obesity is a major cancer risk factor.\nPreviously, I completed my undergraduate degree in Microbiology and Immunology at UBC and worked as a research assistant in Dr. Christian Steidl’s lab at the British Columbia Cancer Research Centre developing prognostic models and studying Follicular Lymphoma cancer evolution."
+    "text": "I am a 3rd year PhD Candidate at Weill Cornell Medicine in the Physiology, Biophysics, and Systems Biology program, working with Dr. Ed Reznik at the Memorial Sloan Kettering Cancer Center.\nMy research focuses on the relationship between obesity and cancer. More specifically, I use computational methods to understand how obesity influences the molecular biology of tumours and determining the likelihood that these differences may be related to how obesity is a major cancer risk factor.\nPreviously, I completed my undergraduate degree in Microbiology and Immunology at UBC and worked as a research assistant in Dr. Christian Steidl’s lab at the British Columbia Cancer Research Centre developing prognostic models and studying Follicular Lymphoma cancer evolution."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html",
+    "href": "posts/blog/biology/scrna.html",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "",
+    "text": "This article serves as an overview of the current single-cell RNA-seq data analysis landscape. Due to the popularity of two major software packages across R and python - Seurat and Scanpy - this document will focus on the methods implemented by these packages."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#challenges",
+    "href": "posts/blog/biology/scrna.html#challenges",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Challenges",
+    "text": "Challenges\n\nPCR Amplification and UMIs\nscRNA-seq poses unique challenges over bulk RNA-seq. From a sample preparation level, the low number of mRNA transcripts from individual cells (as opposed to thousands per sample) necessitates more PCR amplification cycles to get sufficient nucleotide material for sequencing [@townes_feature_2019]. Therefore, many read counts are duplicates of original genetic material. In scRNA-seq, it is advantageous to add unique molecular identifiers (UMIs) to each molecule before PCR amplification. This allows for computational deconvolution, as all PCR duplicates would share the same UMI and thus can be removed. These de-duplicated read counts are known as UMI Counts.\n\n\nCompositional nature of RNA-seq data"
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#common-qc-metrics",
+    "href": "posts/blog/biology/scrna.html#common-qc-metrics",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Common QC Metrics",
+    "text": "Common QC Metrics\n\nMitochondrial Fraction\nFiltering by reads mapping to mitochondrial reads are so common that it deserves its own little section. A high proportion of reads coming from Mitochondrial DNA is often taken to be a sign low quality/dying cells.\nThis metric is calculated on the raw/UMI counts on a per-cell basis, and is defined as:\n\\[\n\\text{Percent counts mt} = \\frac{\\text{Reads mapping to mtDNA}}{\\text{Total Reads in cell}}\n\\]\nDepending on if you are doing single-cell or single-nucleus sequencing, you would expect almost none in the latter as the mitochondria are in the cytoplasm.\n\n\nOther common metrics\nAside from using reads mapping to mtDNA for QC, in some contexts, ribosomal reads are also considered, albeit less often. There are a set of other common QC metrics that are calculated at the gene or cell levels, and it is important to distinguish the two.\nThe following metrics are described in Scanpy’s documentation as well as in the scater paper [@mccarthy_scater_2017].\n\n\nIn Scanpy\nIn scanpy, the sc.pp.calculate_qc_metrics() function calculates the following gene-level QC metrics:\n\nn_cells_by_counts: number of cells that have at least one read mapping to this gene\nmean_counts: the mean counts of this gene\nlog1p_mean_counts: the shifted logarithm of the mean counts\npct_dropout_by_counts: number of cells that don’t have a read mapping to this gene\ntotal_counts: total counts mapping to this gene\nlog1p_total_counts: shifted logarithm of total counts mapping to this gene\n\nand cell-level QC metrics:\n\nn_cells_by_counts: number of cells this expression is measured in\nlog1p_n_cells_by_counts: shifted log of n_cells_by_counts\ntotal_counts: total reads mapping to this cell\nlog1p_total_counts: shifted log of total_counts\npct_counts_in_top_X_genes: X is the number of genes, so it details what percent of counts in this cell maps to the top X genes. A high value may indicate low library complexity (bad capture of RNA molecules) and other technical artifacts.\ntotal_counts_mt: total reads mapping to mtDNA in this cell\nlog1p_total_counts_mt: shifted log of total_counts_mt\npct_counts_mt: percentage of reads mapping to mtDNA in this cell"
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#filtering",
+    "href": "posts/blog/biology/scrna.html#filtering",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Filtering",
+    "text": "Filtering\nAfter computing metrics from the raw count matrix, how do you use them filter out low-quality cells? There are two proposed ways: thresholding and dynamic filtering, both with their strengths and weaknesses.\n\nThreshold Filtering\nThresholding filtering uses hard cutoffs to filter out potential low-quality cells. For example, you may choose a cutoff, say ≤ 20% mitochondrial content.\n\n\nAdaptive Filtering\nAdaptive filtering uses the distribution of the metrics to determine outlier cells. This method assumes that most cells are of good quality, and so outliers can be identified from the distribution of cell qualities. One metric to determine if cells are outliers is the Median Absolute Deviation, defined as:\n\\[\n\\text{MAD} = \\text{median}(|x_i - \\text{median}(X)|)\n\\]\nIt is a measure of statistical dispersion like standard deviation, but is used for filtering single cells because it is a robust statistic, meaning it is less sensitive to outliers. Since our assumption is that most cells are of good quality, this means that bad quality cells are likely outliers and we don’t want them to affect our measure of dispersion.\nThe decision rule is as follows:\n\\[\n\\text{Outlier} =\n\\begin{cases}\n\\text{Yes}, & \\text{if } \\mathrm{MAD} \\geq n \\\\\n\\text{No}, & \\text{otherwise}\n\\end{cases}\n\\]\nwhere n is some value analogous to how many standard deviations away constitute an outlier. Often, this value is something between 3 (recommended in the OSCA book) and 5 (recommended in the sc-best-practices book).\nIn studies with many samples and projects, it is increasingly preferable to use this automatic filtering metric."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#basic-qc-plots",
+    "href": "posts/blog/biology/scrna.html#basic-qc-plots",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Basic QC plots",
+    "text": "Basic QC plots\nIn many instances, it helps to visualize the relationship between QC metrics to see if the filtering you choose is suitable for your dataset.\n\nViolin plots of common metrics\nThese plots show the distribution of each metric across all cells."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#doublet-detection",
+    "href": "posts/blog/biology/scrna.html#doublet-detection",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Doublet Detection",
+    "text": "Doublet Detection\nDoublets are an especially big problem for droplet-based single-cell technologies such as the popular 10X Genomics platform. Doublets are when more than one cell is fed into a bead, and so when sequenced, there will be more genetic material than one would expect from an individual cell."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#preamble",
+    "href": "posts/blog/biology/scrna.html#preamble",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Preamble",
+    "text": "Preamble\nFeature selection is a process of selecting a subset of features that are “informative” and/or highly varying. In the case of scRNA-seq, it is used to reduce the number of genes (which can be up to 30,000 sequenced per cell) that defines each droplet, thus acting as a form of dimensionality reduction. Ideally, this process removes non-informative genes that either mostly zero counts or vary minimally across samples. For experiments that sequence single cells of a given tissue (most common) an underlying assumption is that only a small fraction of genes are informative and biologically varying [@townes_feature_2019]. This is because most gene expression differences are expected to be across tissues.\nFeature selection is a very important step, as it helps to identify the variable features that are then used to generate principal components, inform clustering, and therefore cell typing. The Theis lab has benchmarked the impact of feature selection on downstream analyses in this Nature Methods article.\nIn this section, we will go through several popular methods. As with many things in scRNA analyses, there are many established methods. For a tabular summary, see Table 1."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#mean-variance-plot",
+    "href": "posts/blog/biology/scrna.html#mean-variance-plot",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Mean Variance Plot",
+    "text": "Mean Variance Plot\n\nImplementation in Seurat\nThis is a relatively simple method, published in the original 2015 Seurat paper. The mean and dispersion1 of each feature is computed. Then, features are binned by average expression and a z-score is calculated for dispersion per bin. This is done to learn which genes are variable, given it is in a range of means. That is, which genes have highly variable dispersion given they are in a set bin of means. Evidently, the number of bins is a crucial parameter to select and document.\n\n\nImplementation\nMean Variance Plot is implemented in both Seurat and Scanpy:\n\nSeurat: FindVariableFeatures(selection.method = \"mvp\")\nScanpy: scanpy.pp.highly_variable_genes(batch_key=None, flavor=\"seurat\")"
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#sec:scrna_dispersion",
+    "href": "posts/blog/biology/scrna.html#sec:scrna_dispersion",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Dispersion (Seurat)",
+    "text": "Dispersion (Seurat)\n\nBackground\nNOTE: This method is obsolete, but is included for completeness. NOTE: This method has no associated publication. See the code under the DISP function for implementation reference.\n\n\nAlgorithm in Seurat\nThis process selects the top n features ranked by dispersion (σ^2/μ), which is related, but not equivalent to using the coefficient of variation (σ/μ), which uses the standard deviation (sd = √σ^2).\n\n\nImplementation\nMean Variance Plot is implemented in Seurat in FindVariableFeatures(selection.method = \"disp\").\n\n\nComments\nI have not been able to find why VST is recommended over this method. There is a GitHub issue discussing this, but no clear theoretical conclusion to my understanding."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#variance-stabilizing-transformation",
+    "href": "posts/blog/biology/scrna.html#variance-stabilizing-transformation",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Variance Stabilizing Transformation",
+    "text": "Variance Stabilizing Transformation\n\nBackground\nVariance Stabilizing Transformation (VST) is an applied statistic technique that involves transforming data for visualization (exploratory data analysis) and/or making the data amenable to use regression models. It is a type of method, and there is no single VST method. For example, a log-transform is a VST under some conditions. In bioinformatics, it is a widely applied method in analyzing RNA-sequencing data due to its discrete nature and heteroskedasticity. Its use predates single-cell RNA-seq, being used in popular R packages such as DESeq2 to normalize and visualize bulk RNA-sequencing data.\n\n\nWhy is VST needed?\nVST is used to model a mean-variance relationship (ex. σ^2 = μ for Poisson and σ^2 = μ + αμ^2 for Negative Binomial) as commonly seen in RNA-seq count data where larger means have larger variances. This is necessary for feature selection through identifying highly variable genes (that is, genes with high variance) as the variance is not directly comparable if it is not constant as a function of the mean. Without applying a VST, genes with higher means (higher expressed) will be selected as they will have, by heteroskedasticity, a higher variance, even if they are actually not biologically varying. A VST is intended to reduce the dependence of the variance on the mean.\n\n\nSeurat’s version of VST\nIt is important to note that in the Seurat workflow, VST for feature selection is independent of normalization (e.g. log-transform and scaling by some factor) because log-transformation fails to adequately account for the mean-variance relationship (especially when that relationship is more complex).\nAs described in the Cell paper, the mean-variance is learned from the data. The un-normalized counts/UMI are used to compute the mean and variance of each gene, which are then log10-transformed. A non-linear curve is then fitted using a local fitting of polynomials of degree 2 (loess), which serves as a regularized estimator of variance given the mean of a feature. This estimated function can be used to standardize feature counts without removing higher-than-expected variation. That is, a Z-score transformation normalized with a mean-controlled standard deviation:\n\\[\nz_{ij} = \\frac{x_{ij} - \\bar{x}_i}{\\sigma_i}\n\\]\nwhere z_ij is the standardized value of feature i in cell j, x_ij is the raw value of feature i in cell j, {x}_i is the mean raw value for feature i, and σ_i is the expected standard deviation of feature i derived from the global mean-variance fit.\nAnd enforcing clipping for technical outliers:\n\\[\nz_{ij} \\le \\sqrt{N}\n\\]\nwhere N is the total number of cells.\nThe resulting variance of these standardized counts represents mean-adjusted variances and can be ranked to select highly variable genes (Seurat default returns the top 2000).\n\n\nAvailability and Implementation\nVST is implemented in both Seurat and Scanpy:\n\nSeurat: FindVariableFeatures(selection.method = \"vst\")\nScanpy: scanpy.pp.highly_variable_genes(batch_key=None, flavor=\"seurat_v3\" or \"seurat_v3_paper\")\n\n\n\nComments\nThis method is largely the most common method of finding highly variable genes. In Seurat, an alternative is a newer method: scTransform. In Scanpy, VST is still the most common method as scTransform is not implemented in the package."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#pearson-residuals-sctransform-seurat",
+    "href": "posts/blog/biology/scrna.html#pearson-residuals-sctransform-seurat",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Pearson Residuals: scTransform (Seurat)",
+    "text": "Pearson Residuals: scTransform (Seurat)\n\nTL;DR\nThe method of Pearson residuals fits a negative binomial generalized linear model using sequencing depth as a covariate and takes the Pearson residuals as the normalized UMI counts because residuals are essentially variance unexplained by the model, which in this case is sequencing depth. Thus, the residuals are the “biological variability” of interest.\n\n\nBackground\nscTransform does not strictly fall under a feature selection method. Rather, it is a normalization method that happens to also help with feature selection. That is, it is largely intended as an alternative to the scaling (e.g. by some library size) and transformation (e.g. by log transform) approach of normalization. The most common is the Shifted Logarithm:\n\\[\n\\log\\left(\\frac{n_{ij}}{S} + 1\\right)\n\\]\nwhere n_ij is the raw count of gene i in cell j and S is some scaling factor.\nS is often global like S = 10,000, but are sometimes estimated cell-specific factors (e.g. in scran). If S = 1,000,000, then you would get Counts Per Million (CPM). The +1 is called a pseudocount to deal with 0 counts, as you cannot take log(0).\nThe authors argue that the strengths of this method are:\n\nAvoids heuristics of common normalization methods such as pseudocount addition, log-transform.\nDo not assume fixed library size for any cell.\nLearns mean-variance relationship.\nData-driven VST.\n\nIn this section, we will focus on the feature selection component of scTransform.\n\n\nAlgorithm of V1 in Seurat\nNOTE: This section is for V1, which is described in the original paper. There is an updated version V2.\nThe crux of why scTransform can be used to select HVGs is that it both normalizes the data and performs a variance stabilizing transformation (VST). Loosely, scTransform fits a generalized linear model, specifically a negative binomial regression model to the UMI data. It models the UMI abundance using sequencing depth as a predictor.\nThe GLM is formalized using a log link function:\n\\[\n\\log(\\mathbb{E}(x_i)) = \\beta_0 + \\beta_1 \\log_{10}(m)\n\\]\nwhere x_i is the vector of UMI counts assigned to gene i and m is the vector of molecules assigned (sequencing depth) to the cells, j, so m_j = Σ_i x_{ij}.\nNegative binomial regression does not have an error term, unlike simple linear regression. We encode the model probabilistically:\n\\[\nP(x_i \\mid m) \\sim \\mathrm{NB}(\\mu, \\theta) \\\\\n\\mu = \\exp(\\beta_0 + \\beta_1 \\log_{10}(m))\n\\]\nwhere θ is the overdispersion parameter.\nAs the paper showed that modeling each gene individually leads to overfitting especially for low-abundance genes due to high variance (an overestimation of true variance), they regularize all model parameters by sharing information across genes. Regularization is conducted in 3 steps:\n\nFit a NB regression model on each gene, estimating the parameters.\nUsing μ = β_0 + β_1 log(m), use kernel regression estimate to learn global trends in the data. Regularize on a per-parameter basis (i.e. share information across all genes).\nUsing the regularized parameters, compute the Pearson residuals.\n\nQuickly recall what a “normal” residual is: it is the difference between the actual and predicted value:\n\\[\nz_{ij} = x_{ij} - \\mu_{ij}\n\\]\nPearson residuals are similar to “normal” residuals from a linear regression, but are scaled by the standard deviation to account for heteroskedasticity:\n\\[\nz_{ij} = \\frac{x_{ij} - \\mu_{ij}}{\\sigma_{ij}}\n\\]\nwhere\n\\[\n\\sigma_{ij} = \\sqrt{\\mu_{ij} + \\frac{\\mu_{ij}^2}{\\theta_i}}\n\\]\nIn scTransform, these z_{ij}, the Pearson residuals, are the normalized UMI counts, as they are the “variance unexplained by technical factors such as library size”.\nTo reduce the impact of outliers similar to in VST above, the authors enforce:\n\\[\nz_{ij} \\le \\sqrt{N}\n\\]\nwhere N is the total number of cells.\n\n\nFeature Selection using scTransform\nThe Pearson residuals transformation doubles as a variance stabilizing transformation, which is what allows scTransform to simultaneously normalize and select features.\nWith the variance stabilized, the Pearson residuals (aka normalized UMI counts) can be used directly to find HVGs. For each gene, plot the variance of the Pearson residuals z_i. Rank these by variance, and select the top n = 2000. This gives you a list of HVGs.\n\n\nscTransform V2\nscTransform updated to v2. See the docs.\n\n\nImplementation\nscTransform is implemented in Seurat:\n\nSeurat: SCTransform(object, vst.flavor = \"v2\")\n\n\n\nComments\nscTransform has been argued to be a poorly specified model. Supporting literature may be this and this paper(s), but I am personally not up to date on this argument. The latter paper motivated the update to scTransform V2.\nIf you use scTransform, use the updated version: vst.flavor = \"v2\".\nIf you use scTransform, it replaces 3 normalization functions:\n\nLog normalization (log(x/10000 + 1)): NormalizeData()\nScale and center data (mean = 0, sd = 1): ScaleData()\nSelect HVGs (“mvp”, “vst” etc.): FindVariableFeatures()\n\nThe vars.to.regress option is used to apply a second round of NB regression, in addition to the first, regularized model with sequencing depth.\nFirst: \\[\n\\log(\\mathbb{E}(x_i)) = \\beta_0 + \\beta_1 \\log_{10}(m)\n\\]\nSecond: \\[\n\\log(\\mathbb{E}(x_i)) = \\beta_{0\\mathrm{reg}} + \\beta_{1\\mathrm{reg}} \\log_{10}(m) + \\beta_2(p)\n\\]\nwhere reg indicates they are fixed, regularized parameters from the first set of regressions, while β_2 can be freely estimated."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#deviance",
+    "href": "posts/blog/biology/scrna.html#deviance",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Deviance",
+    "text": "Deviance\n\nBackground\nAs with Pearson Residual methods, a central concern are the effects of the heuristic steps used in common normalization (pseudocount addition, log-transformation) as the choice of the pseudocount is arbitrary and can subtly bias transformed data [@townes_feature_2019]. Townes et al., 2019 argue that the highly variable genes method is susceptible to arbitrary pseudocount addition as very small pseudocount values will increase the variance of genes with zero counts.\nTherefore, in this section, we will cover the Deviance method proposed by Townes et al., 2019, which covers both feature selection and dimensionality reduction.\n\n\nWhat is Deviance?\nDeviance is a goodness-of-fit statistic for a statistical model. It generalizes the sum of squared residuals in ordinary least squares to cases where the model is fit using maximum likelihood estimation. It is often used for generalized linear models.\n\n\nDeviance in scRNA-seq\nDeviance is an alternative that, supposedly, is more robust to outliers.\nTable 1: Common feature selection methods in scRNA-seq.\n\n\n\nApproach\nSoftware\nBrief Description\nRef.\n\n\n\n\nVST\nS, SCP\nFit curve to Mean-variance\nCell paper\n\n\nMean Variance Plot\nS, SCP\nRank within-bin dispersion\nSeurat paper\n\n\nDispersion\nS, SCP\nRank absolute dispersion\nCode\n\n\nPearson Residuals\nS\nUse residuals from NB glm\nV1, critique, V2\n\n\nDeviance\nSCP\nMultinomial Model\nPaper1, Paper2\n\n\n\nS = Seurat, SCP = Scanpy."
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#principal-component-analysis-pca",
+    "href": "posts/blog/biology/scrna.html#principal-component-analysis-pca",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Principal Component Analysis (PCA)",
+    "text": "Principal Component Analysis (PCA)\nPCA is a linear dimensionality reduction method. Given a covariance matrix, it finds a set of orthonormal basis vectors, termed eigenvectors, and their associated eigenvalues. The eigenvectors are the “new” axes, composed of linear combinations of the original features, and the eigenvalues correspond to the variance explained by the corresponding eigenvector.\nIn single-cell analysis, we want to compute these “new” axes, which are essentially meta-features designed to maximize variance (of the original dataset) explained, and use them as the new dimensions, often much smaller than the original features.\nHow do we choose how many of these “new” axes to use? By definition, PCA computes p−1 principal components, where p is the number of features. If we use all the PCs we computed, then we essentially have not reduced the dimension at all.\nBy convention, most people use the first 50 PCs, but there are ways to check if you need to use more. In Scanpy, you use the Variance Ratio:\n\\[\n\\frac{\\text{Variance Explained by PC}}{\\text{Total Variance Explained by All PCs}}\n\\]\nwhere\n\\[\n\\sum_{i=1}^p \\text{Variance Explained by PC}_i\n\\]"
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#diagnosing-the-quality-of-integration",
+    "href": "posts/blog/biology/scrna.html#diagnosing-the-quality-of-integration",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Diagnosing the quality of integration",
+    "text": "Diagnosing the quality of integration"
+  },
+  {
+    "objectID": "posts/blog/biology/scrna.html#footnotes",
+    "href": "posts/blog/biology/scrna.html#footnotes",
+    "title": "An overview of methods in Single-cell RNA-seq",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nDispersion here is NOT the same as the variance. It refers to the variance-to-mean ratio σ^2/μ, and is mostly used for count data.↩︎"
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html",
+    "href": "posts/blog/biology/proteomics.html",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "The Proteome is the total proteins present in a cell, tissue, or organism at a given time. It is more difficult to study than genomics (DNA) because the DNA is generally constant across organisms and time. It is also more difficult to study than transcriptomes (RNA) because1. Despite the many challenges, proteomics is a very informative data modality as it informs us on the presence and quantity of the true effector molecules in biological systems: proteins.\nA great review.\n\n\nA good basic introduction is Thermofisher Scientific’s A tourist’s guide. A good start is why proteomics? As proteins play a crucial role in the structure and function of biological systems, we need to measure protein abundance relative to the stages of a biological system (e.g. differentiation, response to therapeutic intervention, and cell development). From a technical standpoint, the field often uses mRNA-seq as a surrogate to measure protein expression, primarily due to its relatively low cost, ease of access, and technical simplicity. However, several studies have noted that mRNA expression is only weakly correlated with protein expression, suggesting that mRNA differential expression does not necessarily reflect changes in protein abundance, which would be the true effector molecules.\nProteomics was historically qualitative, but pushes have been made to make it both qualitative and quantitative. This brings up an important topic to understand: What’s the difference between traditional and new methods for protein quantification?\nA classic method is western blotting, which is an immunoassay that is based on antibodies probing proteins. It has a simple protocol and is widely used. However, this method requires a priori knowledge of the system as you need to know which proteins to probe, and why a system would have an expected change in that protein. Another limitation is antibody availability: is that antibody available? Is it optimized? Can we afford a lot of antibodies to screen? Are there antibodies for specific protein modifications? Technical limitations include sample intensity, it is only semi-quantitative, has a linear dynamic range, and typically only characterizes one protein per experiment (though you can strip antibodies and re-probe, but with limitations).\nA more modern approach is liquid chromatography coupled to mass spectrometry (LC-MS), which enables system-wide identification and quantification of proteins. It can be used for both discovery (untargeted) and validation (targeted) of protein abundance. Furthermore, it can also be used to probe specific posttranslational modifications (PTMs) and identify the location of the modified residue. Mass spec requires less sample than western blot, and does NOT use antibodies to identify/quantify proteins.\nNow, we’ve established that LC-MS can be used for discovery and/or validation. What’s the difference? Discovery tries to identify as many proteins as possible while preserving the ability to measure relative protein abundance across samples. It optimizes protein identification by spending more time and effort per sample, but analyzes fewer samples. Discovery is most often used to inventory proteins in a sample or detect differences in the abundance of proteins between multiple samples. In contrast, Validation optimizes throughput of many (hundreds/thousands) of samples. This allows for high quantitative precision and accuracy. It is used after discovery to quantify specific proteins from the initial screen.\nIn the following sections, we will discuss the standard proteomic workflow and some variations at a basic level.\n\n\n\nAt a surface level, the typical proteomics workflow can be crudely summarized by the following sequential steps (see Figure Figure 1):\n\nProtein Extraction\nEnzymatic Digestion\nPeptide Separation (see the High-Performance Liquid Chromatography (HPLC) section)\nMass Spectrometry (see the Tandem Mass Spectrometry (MS/MS) section)\nProtein Identification (see Identifying Proteins: Database Search)\nProtein Quantification (see Proteomics Analysis Software)\n\n\n\n\n\nReference: Tutorial from ThermoFisher Scientific\nReference: ThermoFisher: LC-MS information\nHPLC is an analytical chemistry technique used to separate compounds in a chemical mixture. The separation is based on using pressure-driven flow of a mobile phase through a column packed with a stationary phase. The principle is that compounds would separate by how the physiochemical properties of the analyte interact with the mobile phase and stationary phase.\nThe basic steps are:\n\nMobile phase flows.\nAdd samples: inject sample/analyte into the path of the mobile phase.\nSeparate Compounds: the mobile phase carries the analyte through the stationary phase, leading to physical separation of compounds.\nAnalyte Detection: an electrical signal is generated and you can detect target analytes.\nChromatogram Generation: detected analyte signals are translated to a chromatogram (retention time vs analyte signal).\n\nIn the context of proteomics, HPLC is used to separate out proteins and peptides from complex mixtures before running mass spectrometry. It is also very good at separating isomers, molecules with the same formula but different structures. Since mass spectrometers detect mass-to-charge ratio, they have a hard time telling isomers apart since they have the same mass. HPLC can be used to pre-separate them so they can be analyzed separately on the mass spectrometer.\nFrom an analysis perspective, the file output of the HPLC is a chromatogram, which is a graph with time on the x-axis and relative abundance on the y-axis. This graph shows the elution profile of the HPLC run and a peak at x = X, y = Y indicates a large amount of material eluted at time X and fed into the subsequent mass spectrometer. For more examples, see figure 16.1.5 in Zhang et al. (2010).\nThe separated compounds/proteins/peptides are fed into the mass spectrometer in the order that they leave the LC column.\n\n\n\nTandem Mass Spectrometry (see Figure 2) is an extension of regular mass spectrometry. It uses two or more mass spectrometers to analyze peptides multiple times to improve resolution by separating ions multiple times based on their m/z ratios. This process occurs in roughly three steps: selection — fragmentation — detection.\n\nThe LC-separated analytes are fed into the first mass spectrometer, MS1, which outputs a resulting mass spectrum (see Figure 3). This mass spectrum represents peptide precursor ions and is used to select which peptides are fragmented into fragment ions and provided to the second mass spectrometer MS2 to be further analyzed (see the LFQ-DDA and LFQ-DIA sections for the two different ways of selecting). A typical MS/MS run generates sequence-informative fragment ions from a peptide (or many if all identified precursor ions are provided to MS2). Recall from the LC section that compounds are fed into MS1 as they elute from the HPLC column. Therefore, each peptide ion (or more precisely, compounds that elute at the same time from HPLC) gives a mass spectrum.\nWhat are the commonly observed peptide fragments from mass spectrometry? They are primarily produced by cleavage of amide bonds that join two amino acids. A table of commonly observed peptide fragment ions can be found in Zhang et al. (2010).\nThe output of MS/MS is then subject to database search to identify which proteins the ions are from.\n\n\n\n\nAfter identifying the peptide ions from the mass spectra, we need to know which proteins they come from because the primary interest is proteins, not peptides. Database-search algorithms compare observed fragment patterns to theoretical spectra derived from protein sequence databases to assign peptide IDs, which are then rolled up to protein-level identifications.\n\n\n\nQuantifying proteins involves two major strategies: label-free approaches and isotopic labeling.\n\n\n\nIn proteomics, there is a tradeoff between proteome coverage, sample throughput, method development, and reproducibility and precision. The choice of method is motivated by the biological question. Methods can be split into isotopic labeling or label-free.\nConceptually, LFQ measures and compares protein abundances using the natural intensity of peptide signals measured by the mass spec. Isotopic labeling methods (SILAC, TMT, iTRAQ) label the peptides, and so quantification and comparisons are done on the reporter ions.\nFirst, let’s discuss discovery-focused proteomics pipelines. In these cases, we want to identify and quantify (on a relative scale) the whole proteome. Several discovery techniques are: stable isotope labelling by amino acids in cell culture (SILAC), chemical labeling with isobaric mass tags, and label-free quantitation (LFQ).\nThere are two types of LFQ: data-dependent acquisition (DDA) and data-independent acquisition (DIA). These differ in how the MS2 data is acquired.\n\n\nIn DDA, ions for a given m/z range are individually isolated and fragmented. Quantitation involves extracting peptide chromatograms (MS1 precursor ion) from LC-MS runs and integrating peak areas over the chromatographic time scale or using the intensity at the highest point of the chromatographic peak. The highest peaks and/or largest areas are the identified peptides that trigger MS2 acquisition. MS2 is used to further fragment the ions, allowing peptide identification by comparing to databases using software such as MaxQuant. DDA generates high-quality MS2 spectra that are not chimeric and typically contain one peptide.\nA chromatogram is the output of chromatography: each component ideally produces a peak (retention time vs signal). Signal is proportional to analyte concentration, so quantification can use peak area or peak height.\n\nAfter quantifying, you can compare areas and/or intensities across control and experimental samples. LFQ-DDA has good reproducibility and linearity at the peptide and protein levels. Samples are run individually, not pooled.\n\n\n\n\nIn DIA, a precursor mass range is divided into relatively wide (≈ 25 m/z) windows. For each window, the instrument fragments all precursor ions in that window, producing chimeric MS2 spectra that contain fragments from multiple co-isolated peptides. This differs from DDA: instead of isolating one precursor at a time, DIA fragments all precursors in each window. DIA therefore provides MS2 data for all detected precursors, improving coverage and reproducibility, but requires specialized software to deconvolve complex spectra.\nQuantification still typically relies on extracted chromatograms (MS1 precursors and/or MS2 fragment ions) and integrating peak areas across chromatographic time. Each sample is still run independently.\n\n\n\n\nSILAC uses in vivo metabolic incorporation of “heavy” 13C- or 15N-labeled amino acids into the experimental group while control samples use the natural isotopes. These heavier isotopes behave the same chemically and biologically, enabling combined processing (mixing, digestion, LC-MS) while still being distinguishable by mass. Advantages include increased throughput and minimized sample manipulation.\n\n\n\nTMT increases the number of samples that can be analyzed simultaneously (typically 2–16 channels) by using isobaric chemical tags. Each tag has:\n\nAn MS/MS reporter group\nA spacer arm\nAn amine-reactive group (binds peptide N-termini or lysine residues)\n\nSee isobaric labeling on Wikipedia.\nEach sample is labeled with a distinct isotopic variant of the tag, and labeled samples are mixed and analyzed in one run. The tags are isobaric, so in MS1 they appear as a single peak; during MS2 fragmentation each tag releases a reporter ion whose intensity reflects the relative abundance of the peptide in each original sample. Quantification depends on the purity of the precursor ion population selected for MS2.\n\n\n\n\nA spectrometer separates and measures spectral components of a physical sample. A mass spectrometer measures the mass-to-charge ratio (m/z) of ions. Samples are ionized, and ions are separated by electric/magnetic fields and then detected. Only ionized particles are detected.\nBriefly: extract proteins, digest to peptides, ionize peptides, run mass spectrometry. Each MS scan produces a mass spectrum (not the same as a chromatogram). Spectra are used to query databases for peptide IDs. Thousands of scans yield thousands of spectra. Peptide IDs are aggregated and quantified via peak intensities or spectral counts.\n\n\n\n\nMS1 and MS2 follow from tandem mass spectrometry: the first mass analyzer (MS1) separates ions by m/z; selected precursors are fragmented and analyzed by MS2, which separates fragment ions by m/z and detects them. Ions from MS1 are called precursor ions; ions from MS2 are called fragment ions.\n\n\n\nCommon tools for identification and quantification include MaxQuant, Proteome Discoverer, OpenSWATH, DIA-NN, Spectronaut, MSFragger, and others. Choice depends on acquisition strategy (DDA vs DIA), labeling strategy (LFQ, SILAC, TMT), and downstream analysis requirements."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#background-and-history",
+    "href": "posts/blog/biology/proteomics.html#background-and-history",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "A good basic introduction is Thermofisher Scientific’s A tourist’s guide. A good start is why proteomics? As proteins play a crucial role in the structure and function of biological systems, we need to measure protein abundance relative to the stages of a biological system (e.g. differentiation, response to therapeutic intervention, and cell development). From a technical standpoint, the field often uses mRNA-seq as a surrogate to measure protein expression, primarily due to its relatively low cost, ease of access, and technical simplicity. However, several studies have noted that mRNA expression is only weakly correlated with protein expression, suggesting that mRNA differential expression does not necessarily reflect changes in protein abundance, which would be the true effector molecules.\nProteomics was historically qualitative, but pushes have been made to make it both qualitative and quantitative. This brings up an important topic to understand: What’s the difference between traditional and new methods for protein quantification?\nA classic method is western blotting, which is an immunoassay that is based on antibodies probing proteins. It has a simple protocol and is widely used. However, this method requires a priori knowledge of the system as you need to know which proteins to probe, and why a system would have an expected change in that protein. Another limitation is antibody availability: is that antibody available? Is it optimized? Can we afford a lot of antibodies to screen? Are there antibodies for specific protein modifications? Technical limitations include sample intensity, it is only semi-quantitative, has a linear dynamic range, and typically only characterizes one protein per experiment (though you can strip antibodies and re-probe, but with limitations).\nA more modern approach is liquid chromatography coupled to mass spectrometry (LC-MS), which enables system-wide identification and quantification of proteins. It can be used for both discovery (untargeted) and validation (targeted) of protein abundance. Furthermore, it can also be used to probe specific posttranslational modifications (PTMs) and identify the location of the modified residue. Mass spec requires less sample than western blot, and does NOT use antibodies to identify/quantify proteins.\nNow, we’ve established that LC-MS can be used for discovery and/or validation. What’s the difference? Discovery tries to identify as many proteins as possible while preserving the ability to measure relative protein abundance across samples. It optimizes protein identification by spending more time and effort per sample, but analyzes fewer samples. Discovery is most often used to inventory proteins in a sample or detect differences in the abundance of proteins between multiple samples. In contrast, Validation optimizes throughput of many (hundreds/thousands) of samples. This allows for high quantitative precision and accuracy. It is used after discovery to quantify specific proteins from the initial screen.\nIn the following sections, we will discuss the standard proteomic workflow and some variations at a basic level."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#proteomics-workflow-basics",
+    "href": "posts/blog/biology/proteomics.html#proteomics-workflow-basics",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "At a surface level, the typical proteomics workflow can be crudely summarized by the following sequential steps (see Figure Figure 1):\n\nProtein Extraction\nEnzymatic Digestion\nPeptide Separation (see the High-Performance Liquid Chromatography (HPLC) section)\nMass Spectrometry (see the Tandem Mass Spectrometry (MS/MS) section)\nProtein Identification (see Identifying Proteins: Database Search)\nProtein Quantification (see Proteomics Analysis Software)"
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#sec-hplc",
+    "href": "posts/blog/biology/proteomics.html#sec-hplc",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "Reference: Tutorial from ThermoFisher Scientific\nReference: ThermoFisher: LC-MS information\nHPLC is an analytical chemistry technique used to separate compounds in a chemical mixture. The separation is based on using pressure-driven flow of a mobile phase through a column packed with a stationary phase. The principle is that compounds would separate by how the physiochemical properties of the analyte interact with the mobile phase and stationary phase.\nThe basic steps are:\n\nMobile phase flows.\nAdd samples: inject sample/analyte into the path of the mobile phase.\nSeparate Compounds: the mobile phase carries the analyte through the stationary phase, leading to physical separation of compounds.\nAnalyte Detection: an electrical signal is generated and you can detect target analytes.\nChromatogram Generation: detected analyte signals are translated to a chromatogram (retention time vs analyte signal).\n\nIn the context of proteomics, HPLC is used to separate out proteins and peptides from complex mixtures before running mass spectrometry. It is also very good at separating isomers, molecules with the same formula but different structures. Since mass spectrometers detect mass-to-charge ratio, they have a hard time telling isomers apart since they have the same mass. HPLC can be used to pre-separate them so they can be analyzed separately on the mass spectrometer.\nFrom an analysis perspective, the file output of the HPLC is a chromatogram, which is a graph with time on the x-axis and relative abundance on the y-axis. This graph shows the elution profile of the HPLC run and a peak at x = X, y = Y indicates a large amount of material eluted at time X and fed into the subsequent mass spectrometer. For more examples, see figure 16.1.5 in Zhang et al. (2010).\nThe separated compounds/proteins/peptides are fed into the mass spectrometer in the order that they leave the LC column."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#sec-tms",
+    "href": "posts/blog/biology/proteomics.html#sec-tms",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "Tandem Mass Spectrometry (see Figure 2) is an extension of regular mass spectrometry. It uses two or more mass spectrometers to analyze peptides multiple times to improve resolution by separating ions multiple times based on their m/z ratios. This process occurs in roughly three steps: selection — fragmentation — detection.\n\nThe LC-separated analytes are fed into the first mass spectrometer, MS1, which outputs a resulting mass spectrum (see Figure 3). This mass spectrum represents peptide precursor ions and is used to select which peptides are fragmented into fragment ions and provided to the second mass spectrometer MS2 to be further analyzed (see the LFQ-DDA and LFQ-DIA sections for the two different ways of selecting). A typical MS/MS run generates sequence-informative fragment ions from a peptide (or many if all identified precursor ions are provided to MS2). Recall from the LC section that compounds are fed into MS1 as they elute from the HPLC column. Therefore, each peptide ion (or more precisely, compounds that elute at the same time from HPLC) gives a mass spectrum.\nWhat are the commonly observed peptide fragments from mass spectrometry? They are primarily produced by cleavage of amide bonds that join two amino acids. A table of commonly observed peptide fragment ions can be found in Zhang et al. (2010).\nThe output of MS/MS is then subject to database search to identify which proteins the ions are from."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#sec-proteomics_database_search",
+    "href": "posts/blog/biology/proteomics.html#sec-proteomics_database_search",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "After identifying the peptide ions from the mass spectra, we need to know which proteins they come from because the primary interest is proteins, not peptides. Database-search algorithms compare observed fragment patterns to theoretical spectra derived from protein sequence databases to assign peptide IDs, which are then rolled up to protein-level identifications."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#sec-proteomics_quantification",
+    "href": "posts/blog/biology/proteomics.html#sec-proteomics_quantification",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "Quantifying proteins involves two major strategies: label-free approaches and isotopic labeling."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#label-free-vs-isotopic-labeling",
+    "href": "posts/blog/biology/proteomics.html#label-free-vs-isotopic-labeling",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "In proteomics, there is a tradeoff between proteome coverage, sample throughput, method development, and reproducibility and precision. The choice of method is motivated by the biological question. Methods can be split into isotopic labeling or label-free.\nConceptually, LFQ measures and compares protein abundances using the natural intensity of peptide signals measured by the mass spec. Isotopic labeling methods (SILAC, TMT, iTRAQ) label the peptides, and so quantification and comparisons are done on the reporter ions.\nFirst, let’s discuss discovery-focused proteomics pipelines. In these cases, we want to identify and quantify (on a relative scale) the whole proteome. Several discovery techniques are: stable isotope labelling by amino acids in cell culture (SILAC), chemical labeling with isobaric mass tags, and label-free quantitation (LFQ).\nThere are two types of LFQ: data-dependent acquisition (DDA) and data-independent acquisition (DIA). These differ in how the MS2 data is acquired.\n\n\nIn DDA, ions for a given m/z range are individually isolated and fragmented. Quantitation involves extracting peptide chromatograms (MS1 precursor ion) from LC-MS runs and integrating peak areas over the chromatographic time scale or using the intensity at the highest point of the chromatographic peak. The highest peaks and/or largest areas are the identified peptides that trigger MS2 acquisition. MS2 is used to further fragment the ions, allowing peptide identification by comparing to databases using software such as MaxQuant. DDA generates high-quality MS2 spectra that are not chimeric and typically contain one peptide.\nA chromatogram is the output of chromatography: each component ideally produces a peak (retention time vs signal). Signal is proportional to analyte concentration, so quantification can use peak area or peak height.\n\nAfter quantifying, you can compare areas and/or intensities across control and experimental samples. LFQ-DDA has good reproducibility and linearity at the peptide and protein levels. Samples are run individually, not pooled.\n\n\n\n\nIn DIA, a precursor mass range is divided into relatively wide (≈ 25 m/z) windows. For each window, the instrument fragments all precursor ions in that window, producing chimeric MS2 spectra that contain fragments from multiple co-isolated peptides. This differs from DDA: instead of isolating one precursor at a time, DIA fragments all precursors in each window. DIA therefore provides MS2 data for all detected precursors, improving coverage and reproducibility, but requires specialized software to deconvolve complex spectra.\nQuantification still typically relies on extracted chromatograms (MS1 precursors and/or MS2 fragment ions) and integrating peak areas across chromatographic time. Each sample is still run independently.\n\n\n\n\nSILAC uses in vivo metabolic incorporation of “heavy” 13C- or 15N-labeled amino acids into the experimental group while control samples use the natural isotopes. These heavier isotopes behave the same chemically and biologically, enabling combined processing (mixing, digestion, LC-MS) while still being distinguishable by mass. Advantages include increased throughput and minimized sample manipulation.\n\n\n\nTMT increases the number of samples that can be analyzed simultaneously (typically 2–16 channels) by using isobaric chemical tags. Each tag has:\n\nAn MS/MS reporter group\nA spacer arm\nAn amine-reactive group (binds peptide N-termini or lysine residues)\n\nSee isobaric labeling on Wikipedia.\nEach sample is labeled with a distinct isotopic variant of the tag, and labeled samples are mixed and analyzed in one run. The tags are isobaric, so in MS1 they appear as a single peak; during MS2 fragmentation each tag releases a reporter ion whose intensity reflects the relative abundance of the peptide in each original sample. Quantification depends on the purity of the precursor ion population selected for MS2."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#how-does-mass-spec-work",
+    "href": "posts/blog/biology/proteomics.html#how-does-mass-spec-work",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "A spectrometer separates and measures spectral components of a physical sample. A mass spectrometer measures the mass-to-charge ratio (m/z) of ions. Samples are ionized, and ions are separated by electric/magnetic fields and then detected. Only ionized particles are detected.\nBriefly: extract proteins, digest to peptides, ionize peptides, run mass spectrometry. Each MS scan produces a mass spectrum (not the same as a chromatogram). Spectra are used to query databases for peptide IDs. Thousands of scans yield thousands of spectra. Peptide IDs are aggregated and quantified via peak intensities or spectral counts."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#what-is-ms1-and-ms2",
+    "href": "posts/blog/biology/proteomics.html#what-is-ms1-and-ms2",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "MS1 and MS2 follow from tandem mass spectrometry: the first mass analyzer (MS1) separates ions by m/z; selected precursors are fragmented and analyzed by MS2, which separates fragment ions by m/z and detects them. Ions from MS1 are called precursor ions; ions from MS2 are called fragment ions."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#sec-proteomics_software",
+    "href": "posts/blog/biology/proteomics.html#sec-proteomics_software",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "",
+    "text": "Common tools for identification and quantification include MaxQuant, Proteome Discoverer, OpenSWATH, DIA-NN, Spectronaut, MSFragger, and others. Choice depends on acquisition strategy (DDA vs DIA), labeling strategy (LFQ, SILAC, TMT), and downstream analysis requirements."
+  },
+  {
+    "objectID": "posts/blog/biology/proteomics.html#footnotes",
+    "href": "posts/blog/biology/proteomics.html#footnotes",
+    "title": "An overview of Proteomics for Cancer Research",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nNot sure yet.↩︎"
+  },
+  {
+    "objectID": "posts/blog/statistics/linear_models/linear_models.html",
+    "href": "posts/blog/statistics/linear_models/linear_models.html",
+    "title": "The lm() function in R",
+    "section": "",
+    "text": "I think linear models are among the most commonly used tools in biomedical research, and I think it would be to the benefit of many to have a better understanding of such a fundamental tool.\nLinear models also sit at the core of many statistical methods and machine learning models, which is why they appear so prominently in statistics and data science courses. Althought they appear simple, they are deceptively complex, with many statisticians spending their entire careers learning and developing techniques to improve linear models.\nAs such, decades of methodological work have expanded their flexibility, allowing them to handle surprisingly complex experimental designs while remaining relatively easy to interpret. This balance between expressiveness and interpretability is a major reason they continue to be used so widely.\nThroughout my training, I have generally been encouraged to start with linear models and to move on to more complex approaches only when simpler ones are clearly inadequate. In practice, especially in biomedical research, more sophisticated models often need to perform substantially better than linear models to justify the added complexity and loss of interpretability. This trade-off becomes particularly important when the goal is inference—understanding relationships in the data—rather than prediction.\nIn this post, I focus on the most basic case: linear regression, which can be viewed as a building block for more advanced linear modeling frameworks.\nBecause the emphasis here is on [computation], I will keep the theoretical discussion light. Readers interested in the statistical foundations of linear models can refer to upcoming posts in the [theory] series.\nWe will work primarily with the stats::lm() function in R (which I think is a language very well suited for classical statistical analysis), and explore how it behaves in practice, its many function arguments, and how to interpret its output."
+  },
+  {
+    "objectID": "posts/blog/statistics/linear_models/linear_models.html#preamble",
+    "href": "posts/blog/statistics/linear_models/linear_models.html#preamble",
+    "title": "The lm() function in R",
+    "section": "",
+    "text": "I think linear models are among the most commonly used tools in biomedical research, and I think it would be to the benefit of many to have a better understanding of such a fundamental tool.\nLinear models also sit at the core of many statistical methods and machine learning models, which is why they appear so prominently in statistics and data science courses. Althought they appear simple, they are deceptively complex, with many statisticians spending their entire careers learning and developing techniques to improve linear models.\nAs such, decades of methodological work have expanded their flexibility, allowing them to handle surprisingly complex experimental designs while remaining relatively easy to interpret. This balance between expressiveness and interpretability is a major reason they continue to be used so widely.\nThroughout my training, I have generally been encouraged to start with linear models and to move on to more complex approaches only when simpler ones are clearly inadequate. In practice, especially in biomedical research, more sophisticated models often need to perform substantially better than linear models to justify the added complexity and loss of interpretability. This trade-off becomes particularly important when the goal is inference—understanding relationships in the data—rather than prediction.\nIn this post, I focus on the most basic case: linear regression, which can be viewed as a building block for more advanced linear modeling frameworks.\nBecause the emphasis here is on [computation], I will keep the theoretical discussion light. Readers interested in the statistical foundations of linear models can refer to upcoming posts in the [theory] series.\nWe will work primarily with the stats::lm() function in R (which I think is a language very well suited for classical statistical analysis), and explore how it behaves in practice, its many function arguments, and how to interpret its output."
+  },
+  {
+    "objectID": "posts/blog/statistics/linear_models/linear_models.html#linear-models-in-r",
+    "href": "posts/blog/statistics/linear_models/linear_models.html#linear-models-in-r",
+    "title": "The lm() function in R",
+    "section": "Linear models in R",
+    "text": "Linear models in R\n\n\nCode\n# load libraries\nlibrary(ggplot2)\nlibrary(titanic)\n\n\n\n\nCode\n# visualize the dataset\n\nknitr::kable(head(titanic_train))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPassengerId\nSurvived\nPclass\nName\nSex\nAge\nSibSp\nParch\nTicket\nFare\nCabin\nEmbarked\n\n\n\n\n1\n0\n3\nBraund, Mr. Owen Harris\nmale\n22\n1\n0\nA/5 21171\n7.2500\n\nS\n\n\n2\n1\n1\nCumings, Mrs. John Bradley (Florence Briggs Thayer)\nfemale\n38\n1\n0\nPC 17599\n71.2833\nC85\nC\n\n\n3\n1\n3\nHeikkinen, Miss. Laina\nfemale\n26\n0\n0\nSTON/O2. 3101282\n7.9250\n\nS\n\n\n4\n1\n1\nFutrelle, Mrs. Jacques Heath (Lily May Peel)\nfemale\n35\n1\n0\n113803\n53.1000\nC123\nS\n\n\n5\n0\n3\nAllen, Mr. William Henry\nmale\n35\n0\n0\n373450\n8.0500\n\nS\n\n\n6\n0\n3\nMoran, Mr. James\nmale\nNA\n0\n0\n330877\n8.4583\n\nQ\n\n\n\n\n\n\n\nCode\n# fit a linear model\n\nfit &lt;- stats::lm(Fare ~ Age, data = titanic_train)\nfit\n\n\n\nCall:\nstats::lm(formula = Fare ~ Age, data = titanic_train)\n\nCoefficients:\n(Intercept)          Age  \n      24.30         0.35  \n\n\nWhen we call stats::lm in R, we are calling the lm() function from the base stats package. When we “fit” a linear model, we are"
+  },
+  {
+    "objectID": "posts/blog/statistics/linear_models/linear_models.html#disclaimer",
+    "href": "posts/blog/statistics/linear_models/linear_models.html#disclaimer",
+    "title": "The lm() function in R",
+    "section": "Disclaimer",
+    "text": "Disclaimer\nThis writeup represents my knowledge of the topic, and I by no means claim to be an expert.\nPlease Email me with any comments."
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/causal_language.html",
+    "href": "posts/blog/statistics/causal_inference/causal_language.html",
+    "title": "Causal language in computational biology research",
+    "section": "",
+    "text": "My research is not explicitly on causal inference. However, I have received, many times, feedback that has pointed to my weakness where I inject “causal language” to describe my research on datasets and experimental designs where such causal interpretations are not possible. Therefore, I have come to appreciate that knowledge in this are is important to know what claims can be made from the data and experimental setup a researcher has. The express purpose of this is to document for myself how the statements I’ve made previously consititute and “overstepping” of causal interpretation."
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/causal_language.html#preamble",
+    "href": "posts/blog/statistics/causal_inference/causal_language.html#preamble",
+    "title": "Causal language in computational biology research",
+    "section": "",
+    "text": "My research is not explicitly on causal inference. However, I have received, many times, feedback that has pointed to my weakness where I inject “causal language” to describe my research on datasets and experimental designs where such causal interpretations are not possible. Therefore, I have come to appreciate that knowledge in this are is important to know what claims can be made from the data and experimental setup a researcher has. The express purpose of this is to document for myself how the statements I’ve made previously consititute and “overstepping” of causal interpretation."
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/causal_language.html#statistical-vs-causal-questions",
+    "href": "posts/blog/statistics/causal_inference/causal_language.html#statistical-vs-causal-questions",
+    "title": "Causal language in computational biology research",
+    "section": "Statistical vs Causal questions",
+    "text": "Statistical vs Causal questions\nThe distinction here falls between association and causation. In associative studies, we are interested in describing a system or a relationship between observed outcomes under two different settings. In causal studies, we are interested in"
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/causal_language.html#references",
+    "href": "posts/blog/statistics/causal_inference/causal_language.html#references",
+    "title": "Causal language in computational biology research",
+    "section": "References",
+    "text": "References\n\nWarwick and Oxford Academy for PhD Training in Statistics"
   },
   {
     "objectID": "research.html",
     "href": "research.html",
-    "title": "About my Research",
+    "title": "About",
     "section": "",
-    "text": "Obesity is a major risk factor for at least 13 types of cancer, but how it acts as one remains unknown. Other well-known risk factors such as smoking, alcohol, and ultraviolet radiation are generally thought to lead to damages in your DNA, termed mutations. These are then thought to lead to abnormal cells that eventually, given the right conditions, become cancerous. However, obesity is unique from this perspective; no evidence has suggested that it is associated with mutations, and so how it contributes to the risk of developing so many cancers remains a mystery."
+    "text": "Computational Biology\nCancer biology\nStatistics\nPhysiology"
   },
   {
     "objectID": "research.html#lay-summary",
     "href": "research.html#lay-summary",
-    "title": "About my Research",
+    "title": "About",
+    "section": "Lay Summary",
+    "text": "Lay Summary\nI am interested in how a patient’s physiology - for example, obesity - shapes the profiles of their cancers, and how their cancers, in turn, modify the patient’s physiology."
+  },
+  {
+    "objectID": "research.html#scientific-summary",
+    "href": "research.html#scientific-summary",
+    "title": "About",
+    "section": "Scientific Summary",
+    "text": "Scientific Summary\nObesity is a major risk factor for at least 13 types of cancer, but how it acts as one remains unknown. Other well-known risk factors such as smoking, alcohol, and ultraviolet radiation are generally thought to lead to damages in your DNA, termed mutations. These are then thought to lead to abnormal cells that eventually, given the right conditions, become cancerous. However, obesity is unique from this perspective; no evidence has suggested that it is associated with mutations, and so how it contributes to the risk of developing so many cancers remains a mystery."
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/statistical_biases.html#confounding-bias",
+    "href": "posts/blog/statistics/causal_inference/statistical_biases.html#confounding-bias",
+    "title": "Biases in statistics",
+    "section": "Confounding Bias",
+    "text": "Confounding Bias"
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/statistical_biases.html#selection-bias",
+    "href": "posts/blog/statistics/causal_inference/statistical_biases.html#selection-bias",
+    "title": "Biases in statistics",
+    "section": "Selection Bias",
+    "text": "Selection Bias"
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/statistical_biases.html#bias-due-to-conditioning-on-a-mediator",
+    "href": "posts/blog/statistics/causal_inference/statistical_biases.html#bias-due-to-conditioning-on-a-mediator",
+    "title": "Biases in statistics",
+    "section": "Bias due to conditioning on a mediator",
+    "text": "Bias due to conditioning on a mediator"
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/statistical_biases.html#collider-bias",
+    "href": "posts/blog/statistics/causal_inference/statistical_biases.html#collider-bias",
+    "title": "Biases in statistics",
+    "section": "Collider Bias",
+    "text": "Collider Bias"
+  },
+  {
+    "objectID": "posts/blog/statistics/causal_inference/statistical_biases.html#references",
+    "href": "posts/blog/statistics/causal_inference/statistical_biases.html#references",
+    "title": "Biases in statistics",
+    "section": "References",
+    "text": "References\n\nWarwick and Oxford Academy for PhD Training in Statistics"
+  },
+  {
+    "objectID": "posts/blog/biology/cell_types.html",
+    "href": "posts/blog/biology/cell_types.html",
+    "title": "Epithelial cells in cancer biology",
     "section": "",
-    "text": "Obesity is a major risk factor for at least 13 types of cancer, but how it acts as one remains unknown. Other well-known risk factors such as smoking, alcohol, and ultraviolet radiation are generally thought to lead to damages in your DNA, termed mutations. These are then thought to lead to abnormal cells that eventually, given the right conditions, become cancerous. However, obesity is unique from this perspective; no evidence has suggested that it is associated with mutations, and so how it contributes to the risk of developing so many cancers remains a mystery."
+    "text": "I frequently forget what the major cancer cell types in cancer are and do. In this post, I will be covering Epithelial cells."
+  },
+  {
+    "objectID": "posts/blog/biology/cell_types.html#why-this-blog-entry",
+    "href": "posts/blog/biology/cell_types.html#why-this-blog-entry",
+    "title": "Epithelial cells in cancer biology",
+    "section": "",
+    "text": "I frequently forget what the major cancer cell types in cancer are and do. In this post, I will be covering Epithelial cells."
+  },
+  {
+    "objectID": "posts/blog/biology/cell_types.html#epithelial-cells",
+    "href": "posts/blog/biology/cell_types.html#epithelial-cells",
+    "title": "Epithelial cells in cancer biology",
+    "section": "Epithelial cells",
+    "text": "Epithelial cells\nEpithelial cells line the internal and external surfaces of the body. They display a high degree of polarity, namely apical-basal polarity, which separates the function of the two cells."
+  },
+  {
+    "objectID": "posts/blog/biology/cell_types.html#epithelial-vs-endothelial-cells",
+    "href": "posts/blog/biology/cell_types.html#epithelial-vs-endothelial-cells",
+    "title": "Epithelial cells in cancer biology",
+    "section": "Epithelial vs Endothelial cells",
+    "text": "Epithelial vs Endothelial cells\nEndothelial cells are a subset of epithelial cells that line the blood vessels and are important for gas exchange."
+  },
+  {
+    "objectID": "posts/blog/biology/cell_types.html#epithelial-mesenchymal-transition-emt",
+    "href": "posts/blog/biology/cell_types.html#epithelial-mesenchymal-transition-emt",
+    "title": "Epithelial cells in cancer biology",
+    "section": "Epithelial-mesenchymal transition (EMT)",
+    "text": "Epithelial-mesenchymal transition (EMT)\nEpithelial-mesenchymal transition (EMT) is a widely studied process whereby epithelial cells acquire mesenchymal phenotypes upon downregulation of epithelial features. It is widely assocated with cancer pathogenesis and perhaps metastasis, and is therefore of interest to many cancer biologists.\n\nMesenchymal cells\nMesenchymal cells are migrating cells that exhibit back-front polarity. They are highly mobile, as their role during homeostasis is to home to injuries for tissue repair.\nHallmarks of this transition are the loss of apical-basal polarity, increase in cell motility, and a push for cells towards intermediate E/M states, allowing for high degrees of flexibility and thus invasive properties characteristic of many cancer cells."
+  },
+  {
+    "objectID": "posts/blog/biology/cell_types.html#sources",
+    "href": "posts/blog/biology/cell_types.html#sources",
+    "title": "Epithelial cells in cancer biology",
+    "section": "Sources",
+    "text": "Sources\n\nEMT Nature Revews"
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "",
+    "text": "In this part of the appendix, we briefly describe the common oncogenic signaling pathways to build the biological intuition needed to interpret high-dimensional sequencing data. We focus on the pathways described in Figure 1 of this paper."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#preamble",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#preamble",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "Preamble",
+    "text": "Preamble\nThis section is based in large part on the seminal reviews found here.\nIn brief, the PI3K/AKT/mTOR pathway bridges nutrient availability with cellular proliferation. Therefore, in the context of cancer, uncontrolled signaling from this pathway leads to excessive cellular proliferation, a hallmark of cancer."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#basic-biology",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#basic-biology",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "Basic biology",
+    "text": "Basic biology\nPhosphoinositide 3-kinase (PI3K) is an enzyme with 3 classes. Here, we focus on class I. Mammals express 4 isoforms: p110α, p110β, p110γ, and p110δ encoded by PIK3CA, PIK3CB, PIK3CG, and PIK3CD. p110α and p110β isoforms are expressed on nearly all cells, whereas p110γ and p110δ are preferentially expressed in immune cells.\n\nGrowth factors and PI3K\nPI3K responds to growth factors through growth factor receptor-coupled tyrosine kinase activities, small Ras-related GTPases, and heterotrimeric G proteins.\nUpon activation, PI3K phosphorylates the phospholipid PtdIns-4,5-P2 (PIP2), found on all plasma membranes, to generate PtdIns-3,4,5-P3 (PIP3). The activated form, PIP3, then acts as a second messenger to recruit cytoplasmic proteins to the plasma membrane.\n\n\nConsequences of activation (Effectors)\nAmong the most common effectors downstream of receptor-mediated PI3K signaling are members of the AKT sub-family of AGC serine/threonine kinases (AKT1, AKT2, AKT3).\nAnother common effector is mTOR."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#mutagenesis-of-pathway-components-in-cancers",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#mutagenesis-of-pathway-components-in-cancers",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "Mutagenesis of pathway components in cancers",
+    "text": "Mutagenesis of pathway components in cancers\nIn normal cells, PIP3 is heavily regulated and only active transiently. It is rapidly metabolized by phosphatases including the tumour suppressor PTEN, which deactivates the signaling pathway to prevent constitutive proliferation signals.\nAs such, PIK3CA is among the most common oncogenic mutations, as it leads to an abundance of PIP3. Furthermore, inactivating PTEN mutations offer an alternative way of keeping this pathway active by preventing deactivation. Indeed, PIK3CA and PTEN were found to be the second and third most highly mutated genes in human cancers."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#pi3k-pathway-in-metabolism",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#pi3k-pathway-in-metabolism",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "PI3K pathway in metabolism",
+    "text": "PI3K pathway in metabolism\nPI3K signaling is an evolutionarily conserved pathway to respond to environmental cues (e.g. nutrient availability) to regulate cell/organism growth. As mentioned above, PI3K activity is receptor-mediated, and these receptors often bind growth factors. Common ones include PDGF receptor (PDGFR) and epidermal growth factor receptor (EGFR), which drive proliferation and migration; insulin-like growth factor receptor (IGFR), which stimulates growth and survival; and insulin receptor (INSR), which regulates metabolic homeostasis. Upon receiving their ligands, these receptors can then activate the PI3K pathway to regulate cell growth."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#preamble-1",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#preamble-1",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "Preamble",
+    "text": "Preamble\nThe content in this section is in large part from the seminal review(s) found here.\nWhile we briefly described mTOR signaling as an effector of the PI3K pathway, it is prominent enough to warrant its own section.\nIn brief, mTOR is a serine/threonine kinase and a master regulator of cell growth and cellular metabolism. It promotes anabolism (building larger molecules from smaller ones) through processes such as ribosome biogenesis, protein, nucleotide, fatty acid, and lipid synthesis, and downregulates catabolic processes such as autophagy (lysosome-driven degradation of cellular components).\nAs such, it is commonly activated in cancer cells, contributing to cellular proliferation and metabolic adaptations."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#basic-biology-1",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#basic-biology-1",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "Basic biology",
+    "text": "Basic biology\nMammalian target of rapamycin (mTOR) is named after rapamycin, an anti-fungal drug that was discovered to have anti-cancer properties.\nAs mentioned above, it is a kinase that helps make up two distinct complexes, mTORC1 and mTORC2.\n\nmTORC1\nmTORC1 is activated by growth factors through the PI3K-AKT signaling pathway (covered above). Growth factors that activate mTORC1 include insulin.\n\n\nmTORC2\nmTORC2 can be activated solely by growth factors.\n\n\nSignaling effectors\nBoth mTORC1 and mTORC2 regulate cell growth and metabolism by either 1) phosphorylating metabolic enzymes or 2) through downstream signaling effectors."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#preamble-2",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#preamble-2",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "Preamble",
+    "text": "Preamble\nThis section is based in large part on the seminal review found here.\nThe NF-κB pathway is one of the primary intracellular immune signaling pathways. It mediates the expression of pro-inflammatory genes, intended to be protective in response to infections and tissue damage. However, due to its pro-inflammatory nature, its dysregulation is a hallmark of chronic inflammatory diseases such as cancer and obesity."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#basic-biology-2",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#basic-biology-2",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "Basic biology",
+    "text": "Basic biology\nNuclear factor-κB (NF-κB) is a family of inducible transcription factors which regulate many genes involved in immune and inflammatory responses.\nUnder this family, there are 5 structurally related members:\n\nNF-κB1 (p50)\nNF-κB2 (p52)\nRelA (p65)\nRelB (p65)\nc-Rel (p65)\n\nTogether, they regulate the expression of target proteins by binding to a specific DNA element, the κB enhancer, as hetero- or homo-dimers.\nAs these regulate immune and inflammatory processes, they are tightly regulated in the cytoplasm by a family of inhibitor proteins (e.g. IκB) and the precursors of NF-κB1 and NF-κB2 through sequestration.\nThere are two major signaling pathways that activate NF-κB, divided into the canonical and non-canonical pathways.\n\nCanonical pathway\nThe canonical pathway responds to cytokine receptors, pattern-recognition receptors (PRRs), TNF receptor (TNFR) superfamily members, as well as T- and B-cell receptors.\nThis pathway works primarily by degrading inhibitory proteins (i.e. releasing the brake). Specifically IκBα is degraded through site-specific phosphorylation by a multi-subunit IκB kinase (IKK) complex. Once activated (e.g. by cytokines, growth factors, mitogens, microbial components, and stress agents), IKK phosphorylates IκBα at two N-terminal serines, leading to ubiquitin-dependent protein degradation. Together, this allows NF-κB members (e.g. p50/RelA and p50/c-Rel dimers) to quickly translocate into the nucleus to bind the κB enhancer and induce transcription.\n\n\nNon-canonical pathway\nThe non-canonical pathway differs in terms of what stimuli it responds to, as well as the mechanism by which NF-κB is allowed to carry out its functionality.\nThis pathway responds specifically to ligands of a subset of TNFR superfamily members, namely LTβR, BAFFR, CD40, and RANK. These proteins correspond to cell-differentiating and developmental stimuli.\nMechanistically, the non-canonical pathway does not degrade IκBα to “release the brakes”; rather, it helps process the precursor of NF-κB2 (p52), p100, into the activated form, NF-κB2 (p52). This then allows p52 translocation into the nucleus as a dimer with RelB (a p52/RelB dimer).\n\n\nHow do the two pathways relate?\nIt appears that the canonical pathway is designed to be broadly involved in the immune response, while the non-canonical pathway more specifically regulates adaptive immune responses.\n\n\nWhat cells is the NF-κB pathway active in?\nAs the NF-κB pathway mediates inflammatory responses, it is active in innate immune cells as well as adaptive immune cells such as T cells."
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#nf-κb-in-innate-immune-cells",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#nf-κb-in-innate-immune-cells",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "NF-κB in innate immune cells",
+    "text": "NF-κB in innate immune cells\nInnate immune cells include macrophages, dendritic cells, and neutrophils. Characteristics of these cells are that they express PRRs that detect conserved microbial components, pathogen-associated molecular patterns (PAMPs), as well as damage-associated molecular patterns (DAMPs) released by necrotic cells and damaged tissues.\n\n\nPRRs include toll-like receptors, RIG-I like receptors, NOD-like receptors, C-type lectin-like receptors and cytosolic DNA sensors.\nThese PRRs, once stimulated, commonly activate the canonical NF-κB pathway to activate the transcription of pro-inflammatory cytokines (cell communication), chemokines (cell recruitment), and other inflammatory mediators. Together, this cocktail of released cytokines can directly promote inflammation and promote the differentiation of inflammatory T cells.\n\nIn macrophages\nMore specifically to macrophages, NF-κB is a key transcription factor that induces the expression of pro-inflammatory cytokine/chemokine genes, and polarization to the M1 phenotype (pro-inflammatory). These M1 macrophages promote the differentiation of inflammatory T cells, including Th1 (by IL-12) and Th17 subsets.\nPro-inflammatory cytokines released by M1 macrophages include:\n\nIL-1\nIL-6\nIL-12\nTNF-α\nother chemokines\n\nAnti-inflammatory cytokines released by M2 macrophages include:\n\nIL-10\nIL-13"
+  },
+  {
+    "objectID": "posts/blog/biology/cancer_signaling_pathways.html#nf-κb-in-t-cells",
+    "href": "posts/blog/biology/cancer_signaling_pathways.html#nf-κb-in-t-cells",
+    "title": "Common Oncogenic Signaling Pathways",
+    "section": "NF-κB in T cells",
+    "text": "NF-κB in T cells\nIn the adaptive immune compartment, NF-κB signaling is particularly important in CD4+ T-helper (Th) cells. As described above in the macrophage section, NF-κB promotes pro-inflammatory cytokine expression in macrophages, which helps T cells differentiate into the pro-inflammatory Th1 and Th17 phenotypes.\nHere, we add that NF-κB additionally regulates TCR signaling, meaning that it regulates T-cell functions both from extracellular cytokine signaling as well as intracellular signaling.\nNaive T cells are activated when their T-cell receptor (TCR) engages with a major histocompatibility complex (MHC) with a cognate antigen presented by an antigen-presenting cell, mostly dendritic cells. Members of the canonical NF-κB pathway, RelA and c-Rel, play a central role in regulating TCR signaling that enables naive T-cell activation."
   },
   {
     "objectID": "posts/blog/stats_normal_dist.html",

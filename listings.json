@@ -2,6 +2,13 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/blog/biology/cell_types.html",
+      "/posts/blog/biology/proteomics.html",
+      "/posts/blog/biology/cancer_signaling_pathways.html",
+      "/posts/blog/biology/scrna.html",
+      "/posts/blog/statistics/causal_inference/causal_language.html",
+      "/posts/blog/statistics/causal_inference/statistical_biases.html",
+      "/posts/blog/statistics/linear_models/linear_models.html",
       "/posts/blog/stats_normal_dist.html"
     ]
   }
